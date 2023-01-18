@@ -20,6 +20,7 @@
 		1099283829777AA200089FDA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1099283A29777AA200089FDA /* CovidTrackr.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CovidTrackr.entitlements; sourceTree = "<group>"; };
 		1099283C29777AA300089FDA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		1099284329777AE600089FDA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,6 +37,7 @@
 		1099282829777AA100089FDA = {
 			isa = PBXGroup;
 			children = (
+				1099284329777AE600089FDA /* README.md */,
 				1099283329777AA100089FDA /* CovidTrackr */,
 				1099283229777AA100089FDA /* Products */,
 			);
