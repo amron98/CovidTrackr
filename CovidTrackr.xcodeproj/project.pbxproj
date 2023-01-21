@@ -11,6 +11,13 @@
 		1099283729777AA100089FDA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1099283629777AA100089FDA /* ContentView.swift */; };
 		1099283929777AA200089FDA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1099283829777AA200089FDA /* Assets.xcassets */; };
 		1099283D29777AA300089FDA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1099283C29777AA300089FDA /* Preview Assets.xcassets */; };
+		1099284729779B1F00089FDA /* CountryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1099284629779B1F00089FDA /* CountryData.swift */; };
+		1099284C2977A33000089FDA /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1099284B2977A33000089FDA /* APIService.swift */; };
+		1099285029784E6700089FDA /* Timeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1099284F29784E6700089FDA /* Timeline.swift */; };
+		109928532978904000089FDA /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 109928522978904000089FDA /* DashboardView.swift */; };
+		1099285B297A414E00089FDA /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1099285A297A414D00089FDA /* DashboardViewModel.swift */; };
+		1099285F297A930C00089FDA /* LineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1099285E297A930C00089FDA /* LineChartView.swift */; };
+		10992861297A95D000089FDA /* BarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10992860297A95D000089FDA /* BarChartView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +28,13 @@
 		1099283A29777AA200089FDA /* CovidTrackr.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CovidTrackr.entitlements; sourceTree = "<group>"; };
 		1099283C29777AA300089FDA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1099284329777AE600089FDA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		1099284629779B1F00089FDA /* CountryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryData.swift; sourceTree = "<group>"; };
+		1099284B2977A33000089FDA /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		1099284F29784E6700089FDA /* Timeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timeline.swift; sourceTree = "<group>"; };
+		109928522978904000089FDA /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		1099285A297A414D00089FDA /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
+		1099285E297A930C00089FDA /* LineChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartView.swift; sourceTree = "<group>"; };
+		10992860297A95D000089FDA /* BarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +69,9 @@
 			isa = PBXGroup;
 			children = (
 				1099283429777AA100089FDA /* CovidTrackrApp.swift */,
+				109928512978902100089FDA /* Views */,
+				10992862297B441600089FDA /* View Models */,
+				109928442977989B00089FDA /* APIService */,
 				1099283629777AA100089FDA /* ContentView.swift */,
 				1099283829777AA200089FDA /* Assets.xcassets */,
 				1099283A29777AA200089FDA /* CovidTrackr.entitlements */,
@@ -69,6 +86,42 @@
 				1099283C29777AA300089FDA /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		109928442977989B00089FDA /* APIService */ = {
+			isa = PBXGroup;
+			children = (
+				10992845297798CC00089FDA /* Models */,
+				1099284B2977A33000089FDA /* APIService.swift */,
+			);
+			path = APIService;
+			sourceTree = "<group>";
+		};
+		10992845297798CC00089FDA /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				1099284629779B1F00089FDA /* CountryData.swift */,
+				1099284F29784E6700089FDA /* Timeline.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		109928512978902100089FDA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				109928522978904000089FDA /* DashboardView.swift */,
+				1099285E297A930C00089FDA /* LineChartView.swift */,
+				10992860297A95D000089FDA /* BarChartView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		10992862297B441600089FDA /* View Models */ = {
+			isa = PBXGroup;
+			children = (
+				1099285A297A414D00089FDA /* DashboardViewModel.swift */,
+			);
+			path = "View Models";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -141,8 +194,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1099285029784E6700089FDA /* Timeline.swift in Sources */,
 				1099283729777AA100089FDA /* ContentView.swift in Sources */,
+				10992861297A95D000089FDA /* BarChartView.swift in Sources */,
+				1099284C2977A33000089FDA /* APIService.swift in Sources */,
+				1099285B297A414E00089FDA /* DashboardViewModel.swift in Sources */,
+				1099284729779B1F00089FDA /* CountryData.swift in Sources */,
 				1099283529777AA100089FDA /* CovidTrackrApp.swift in Sources */,
+				109928532978904000089FDA /* DashboardView.swift in Sources */,
+				1099285F297A930C00089FDA /* LineChartView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,6 +329,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"CovidTrackr/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -279,7 +340,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.6;
@@ -287,7 +348,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.amroncodes.CovidTrackr;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -305,6 +368,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"CovidTrackr/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -315,7 +379,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.6;
@@ -323,7 +387,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.amroncodes.CovidTrackr;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
