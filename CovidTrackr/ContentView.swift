@@ -8,14 +8,15 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    var dashboardViewModel: DashboardViewModel = DashboardViewModel()
+    
+    init(){
+        self.dashboardViewModel.fetchCountryData()
+        self.dashboardViewModel.fetchGlobalTimeline()
+    }
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
-        }
-        .padding()
+        DashboardView(viewModel: dashboardViewModel)
     }
 }
 
