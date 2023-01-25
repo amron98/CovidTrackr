@@ -9,8 +9,8 @@ import Foundation
 
 struct RowData {
     let country: String
-    let confirmed: String
-    let deaths: String
+    let confirmed: Int
+    let deaths: Int
     let flag: String
 }
 

@@ -9,46 +9,38 @@ import SwiftUI
 
 struct CountryListView: View {
     @State var searchVal: String = ""
+    @State var selection: String = ""
+    
+    @ObservedObject var viewModel : DashboardViewModel
+    @State var showModal: Bool = false
+    @State var countryTimeline: Timeline = Timeline(cases: [:], deaths: [:])
     
     var body: some View {
         NavigationStack {
-            List {
-                RowView(data: self.ethiopiaRowData())
-                RowView(data: self.canadaRowData())
-                RowView(data: self.brazilRowData())
-                RowView(data: self.franceRowData())
-                RowView(data: self.kenyaRowData())
-                RowView(data: self.usaRowData())
-                RowView(data: self.ethiopiaRowData())
-                RowView(data: self.canadaRowData())
-                RowView(data: self.brazilRowData())
-                RowView(data: self.franceRowData())
+            List(viewModel.countryData){ country in
+                
+                var rowData = RowData(country: country.country ?? "", confirmed: country.stats?.confirmed ?? 0, deaths: country.stats?.deaths ?? 0, flag: "🇺🇸")
+                
+                
+                RowView(data: rowData)
+                
+                    .onTapGesture {
+                        self.selection = country.country!
+                    
+                        showModal.toggle()
+                        
+                    }
+                    .sheet(isPresented: $showModal, content: {
+                        ModalView(country: self.selection)
+                            .presentationDragIndicator(.visible)
+                            .presentationDetents([.height(500)])
+                    })
             }
             .listStyle(.plain)
-            .navigationTitle("Countries")
+            .navigationBarTitle("Countries")
         }
         .frame(maxWidth: .infinity, alignment: .top)
         .searchable(text: $searchVal, placement: .navigationBarDrawer(displayMode: .always))
-    }
-    
-    // Sample Data
-    func ethiopiaRowData() -> RowData{
-        .init(country: "Ethiopia", confirmed: "3.2M", deaths: "35K", flag: "🇪🇹")
-    }
-    func canadaRowData() -> RowData{
-        .init(country: "Canada", confirmed: "50.5M", deaths: "10K", flag: "🇨🇦")
-    }
-    func brazilRowData() -> RowData{
-        .init(country: "Brazil", confirmed: "100.9M", deaths: "421.8K", flag: "🇧🇷")
-    }
-    func franceRowData() -> RowData{
-        .init(country: "France", confirmed: "200M", deaths: "40.6K", flag: "🇫🇷")
-    }
-    func kenyaRowData() -> RowData{
-        .init(country: "Kenya", confirmed: "800.8K", deaths: "11.9K", flag: "🇰🇪")
-    }
-    func usaRowData() -> RowData{
-        .init(country: "United States of America", confirmed: "600.6M", deaths: "6.4M", flag: "🇺🇸")
     }
 }
 
@@ -81,11 +73,6 @@ struct RowView : View {
                     .foregroundColor(.gray)
             }
         }
-    }
-}
-struct CountryListView_Previews: PreviewProvider {
-    static var previews: some  View {
-        CountryListView()
     }
 }
 
