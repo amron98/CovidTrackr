@@ -16,7 +16,19 @@ struct ContentView: View {
         self.dashboardViewModel.fetchGlobalTimeline()
     }
     var body: some View {
-        DashboardView(viewModel: dashboardViewModel)
+        TabView {
+            DashboardView(viewModel: dashboardViewModel)
+                .tabItem{
+                    Image(systemName: "house")
+                    Text("Dashboard")
+                }
+                
+            CountryListView(viewModel: dashboardViewModel)
+                .tabItem{
+                    Image(systemName: "list.dash")
+                    Text("Countries")
+                }
+        }
     }
 }
 
