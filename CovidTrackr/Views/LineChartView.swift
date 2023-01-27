@@ -11,37 +11,36 @@ import SwiftUI
 import Charts
 
 struct LineChartView: View {
-    @State var chartData = [(key: Date, value: Int)]()
     
-    @ObservedObject var viewModel: DashboardViewModel
+    
     @Environment(\.colorScheme) var colorScheme
     
+    @State var chartData = [(key: Date, value: Int)]()
     @State var currentTab: String = "Cases"
     @State var currentTotal: Int = 0
     @State var animate = false
     
-    // MARK: Gesture Properties
-    @State var currentActiveItem : (key: Date, value: Int)?
-    @State var plotWidth: CGFloat = 0
     
+    var chartTitle: String = ""
+    var timeline: Timeline
     
-    
-    init(viewModel: DashboardViewModel){
-        self.viewModel = viewModel
-        self.currentTotal = viewModel.globalTimeline.getCasesFormatted().last?.value ?? 3
-        self.chartData = viewModel.globalTimeline.getCasesFormatted()
+    init(title: String, timeline: Timeline){
+        self.chartTitle = String(stringLiteral: title)
+        self.timeline = timeline
     }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack{
-                Text("Global Totals")
+                Text("\(chartTitle)")
                     .font(.headline.bold())
  
                 
                 Picker("", selection: $currentTab) {
-                    Text("Cases").tag("Cases")
-                    Text("Deaths").tag("Deaths")
+                    Text("Cases")
+                        .tag("Cases")
+                    Text("Deaths")
+                        .tag("Deaths")
                     
                 }
                 .pickerStyle(.segmented)
@@ -69,13 +68,16 @@ struct LineChartView: View {
                 )
         }
         .onChange(of: currentTab){newValue in
-            chartData = (currentTab == "Cases") ? viewModel.globalTimeline.getCasesFormatted() : viewModel.globalTimeline.getDeathsFormatted()
+            chartData = (currentTab == "Cases") ? timeline.getCasesFormatted() : timeline.getDeathsFormatted()
             
-            currentTotal = (currentTab == "Cases") ? viewModel.globalTimeline.getCasesFormatted().first?.value ?? 1 : viewModel.globalTimeline.getDeathsFormatted().first?.value ?? 1
+            currentTotal = (currentTab == "Cases") ? timeline.getCasesFormatted().first?.value ?? 1 : timeline.getDeathsFormatted().first?.value ?? 1
             
 
             // Re-Animating View
             animateGraph(fromChange: true)
+        }.onAppear {
+            self.currentTotal = timeline.getCasesFormatted().last?.value ?? 4
+            self.chartData = timeline.getCasesFormatted()
         }
     }
     
@@ -103,38 +105,21 @@ struct LineChartView: View {
     
             }
         }
-        .chartYAxis (.hidden)
-        .chartOverlay(content: {proxy in
-            GeometryReader{innerProxy in
-                Rectangle()
-                    .fill(.clear).contentShape(Rectangle())
-                    .gesture(
-                        DragGesture()
-                            .onChanged{value in
-                                // MARK: Getting Current Location
-                                // Extract the date in x-axis
-                                let location = value.location
-                                // Extracting Value From The Location
-                                if let x: Date = proxy.value(atX: location.x){
-                                    
-                                    if let currentItem = chartData.first(where: {item in
-                                        item.key == x
-                                    }){
-                                        print("Current Item: \(currentItem)")
-                                        self.currentActiveItem = currentItem
-                                        self.plotWidth = proxy.plotAreaSize.width
-                                    }
-                                }
-                            }.onEnded{value in
-                                self.currentActiveItem = nil
-                            }
-                    )
+        .chartYAxis {
+            AxisMarks() {
+                let value = $0.as(Int.self)!
+                AxisGridLine().foregroundStyle(.clear)
+                AxisTick().foregroundStyle(.clear)
+                AxisValueLabel {
+                    Text("\(Utils.formatWithSuffix(value))")
+                }
             }
-        })
-        .frame(height: 200)
-        .onAppear{
-            animateGraph()
+            
         }
+        .frame(maxHeight: 200)
+//        .onAppear{
+//            animateGraph()
+//        }
     }
     
     func animateGraph(fromChange: Bool = false){
