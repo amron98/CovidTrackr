@@ -9,9 +9,10 @@ import SwiftUI
 
 struct ContentView: View {
     
-    var dashboardViewModel: DashboardViewModel = DashboardViewModel()
+    var dashboardViewModel: DashboardViewModel
     
     init(){
+        self.dashboardViewModel = DashboardViewModel()
         self.dashboardViewModel.fetchCountryData()
         self.dashboardViewModel.fetchGlobalTimeline()
     }
