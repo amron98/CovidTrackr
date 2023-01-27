@@ -7,31 +7,46 @@
 
 import SwiftUI
 
+// Note: This will eventually be part of the CountryListViewModel
+class Selection: ObservableObject {
+    @Published var selectedCountry: CountryData? = nil
+}
+
 struct CountryListView: View {
-    @State var searchVal: String = ""
-    @State var selection: String = ""
     
     @ObservedObject var viewModel : DashboardViewModel
+    @ObservedObject var selection = Selection()
+    
+    @State var searchVal: String = ""
     @State var showModal: Bool = false
-    @State var countryTimeline: Timeline = Timeline(cases: [:], deaths: [:])
+
+    // Used to store a filtered list of countries based on the searchVal
+    var searchResults: [CountryData] {
+        if searchVal.isEmpty {
+            return viewModel.countryData
+        }
+        else {
+            return viewModel.countryData.filter({ country in
+                country.country?.contains(searchVal) ?? false
+            })
+        }
+    }
+
     
     var body: some View {
-        NavigationStack {
-            List(viewModel.countryData){ country in
-                
-                var rowData = RowData(country: country.country ?? "", confirmed: country.stats?.confirmed ?? 0, deaths: country.stats?.deaths ?? 0, flag: "🇺🇸")
+        NavigationView {
+            List(searchResults){ country in
+                let rowData = RowData(country: country.country ?? "", confirmed: country.stats?.confirmed ?? 0, deaths: country.stats?.deaths ?? 0, flag: "🇺🇸")
                 
                 
                 RowView(data: rowData)
-                
+                    .contentShape(Rectangle())
                     .onTapGesture {
-                        self.selection = country.country!
-                    
                         showModal.toggle()
-                        
+                        selection.selectedCountry = country
                     }
                     .sheet(isPresented: $showModal, content: {
-                        ModalView(country: self.selection)
+                        ModalView(country: selection.selectedCountry ?? country, timeline: viewModel.globalTimeline)
                             .presentationDragIndicator(.visible)
                             .presentationDetents([.height(500)])
                     })
@@ -39,7 +54,6 @@ struct CountryListView: View {
             .listStyle(.plain)
             .navigationBarTitle("Countries")
         }
-        .frame(maxWidth: .infinity, alignment: .top)
         .searchable(text: $searchVal, placement: .navigationBarDrawer(displayMode: .always))
     }
 }
@@ -51,9 +65,9 @@ struct RowView : View {
         HStack(alignment: .center) {
             Text(data.flag).font(.custom("Hi", size: 24))
             Text(data.country).font(.headline).fontWeight(.regular)
-            Spacer(minLength: 10)
+            Spacer()
             VStack {
-                Text(String(data.confirmed))
+                Text(Utils.formatWithSuffix(data.confirmed))
                     .foregroundColor(.blue)
                     .font(.subheadline)
                 
@@ -64,7 +78,7 @@ struct RowView : View {
             .padding(.leading)
             
             VStack {
-                Text(String(data.deaths))
+                Text(Utils.formatWithSuffix(data.deaths))
                     .foregroundColor(.red)
                     .font(.subheadline)
                 
