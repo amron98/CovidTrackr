@@ -10,7 +10,7 @@ import Foundation
 class DashboardViewModel: ObservableObject {
     @Published var globalTimeline : Timeline = Timeline(cases: [String : Int](), deaths: [String : Int]())
     @Published var countryData: [CountryData] = []
-    @Published var currentGlobalCases: Int = 0
+    @Published var currentGlobalCases: Int = 3 // For debugging
     @Published var currentGlobalDeaths: Int = 0
     
     enum SortBy {
@@ -35,6 +35,27 @@ class DashboardViewModel: ObservableObject {
             }
         }
             
+    }
+    
+    // Makes an API fetch to get timeline data for a country
+    func fetchTimeline(country: String, completion: @escaping (Timeline?) -> Void){
+        var request = URLRequest(url: URL(string: "https://disease.sh/v3/covid-19/historical")!)
+        request.httpMethod = "GET"
+        request.url?.append(path: country)
+        
+        DispatchQueue.global().async {
+            APIService.fetchData(for: request.url!) { (result: Result<Timeline, Error>) in
+                switch result {
+                case .success(let responseData):
+                    print(responseData)
+                    completion(responseData)
+                case .failure(let error):
+                    print("Error fetching timeline for \(country)")
+                    print(error)
+                    completion(nil)
+                }
+            }
+        }
     }
     
     // Makes an API fetch to update countryData data
