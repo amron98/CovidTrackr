@@ -10,8 +10,7 @@ CovidTrackr is an iOS app for visualizing global COVID-19 data from the [disease
 
 
 ## Demo Of Current Version
-
   <p align="center">
-    <img src="https://user-images.githubusercontent.com/54814481/215230521-ec7f0f1c-d1c5-4156-94d7-a6c65dcc114c.gif" alt="demo" height="950"/>
+    <img src="https://user-images.githubusercontent.com/54814481/215230521-ec7f0f1c-d1c5-4156-94d7-a6c65dcc114c.gif" alt="demo" height="700"/>
   <p>
 
