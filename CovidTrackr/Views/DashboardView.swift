@@ -31,7 +31,8 @@ struct DashboardView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                LineChartView(viewModel: viewModel)
+                LineChartView(title: "Global Totals", timeline: viewModel.globalTimeline)
+                Spacer()
                 BarChartView(viewModel: viewModel)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)

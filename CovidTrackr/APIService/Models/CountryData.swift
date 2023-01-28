@@ -7,7 +7,8 @@
 
 import Foundation
 
-public struct CountryData: Decodable {
+public struct CountryData: Decodable, Identifiable {
+    public let id: UUID = UUID()
     public let country: String?
     public let updatedAt: String?
     public let stats: CovidStats?

@@ -18,6 +18,9 @@ struct BarChartView: View {
     @State var topFive : [CountryData] = []
     @State var animate = false
     
+    @State var max = 1000000000
+    @State var min = 10
+    
     init(viewModel: DashboardViewModel){
         self.viewModel = viewModel
         self.topFive = viewModel.countryData.sorted(){
@@ -79,7 +82,8 @@ struct BarChartView: View {
                 
                 BarMark(
                     x: .value("Country", item.country!),
-                    y: .value("", (currentTab == "Cases") ? item.stats?.confirmed ?? 2: item.stats?.deaths ?? 2)
+                    y: .value("", (currentTab == "Cases") ? item.stats?.confirmed ?? 2 : item.stats?.deaths ?? 2),
+                    width: 50
                     
                 )
                 .interpolationMethod(.catmullRom)
@@ -89,15 +93,25 @@ struct BarChartView: View {
         }
         // MARK: Customizing Y-Axis Length
         //        .chartYScale(range: ymin...ymax)
-        .chartYAxis(.hidden)
+        .chartYAxis {
+            AxisMarks() {
+                let value = $0.as(Int.self)!
+                AxisGridLine().foregroundStyle(.clear)
+                AxisTick().foregroundStyle(.clear)
+                AxisValueLabel {
+                    Text("\(Utils.formatWithSuffix(value))")
+                }
+            }
+            
+        }
         .chartXAxis {
             AxisMarks(position: .bottom) { _ in
-                 AxisGridLine().foregroundStyle(.clear)
-                 AxisTick().foregroundStyle(.clear)
+                AxisGridLine().foregroundStyle(.clear)
+                AxisTick().foregroundStyle(.clear)
                 AxisValueLabel()
             }
         }
-        .frame(height: 200)
+        .frame(maxHeight: 200)
         .onAppear{
             animateGraph()
         }

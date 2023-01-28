@@ -9,14 +9,27 @@ import SwiftUI
 
 struct ContentView: View {
     
-    var dashboardViewModel: DashboardViewModel = DashboardViewModel()
+    var dashboardViewModel: DashboardViewModel
     
     init(){
+        self.dashboardViewModel = DashboardViewModel()
         self.dashboardViewModel.fetchCountryData()
         self.dashboardViewModel.fetchGlobalTimeline()
     }
     var body: some View {
-        DashboardView(viewModel: dashboardViewModel)
+        TabView {
+            DashboardView(viewModel: dashboardViewModel)
+                .tabItem{
+                    Image(systemName: "house")
+                    Text("Dashboard")
+                }
+                
+            CountryListView(viewModel: dashboardViewModel)
+                .tabItem{
+                    Image(systemName: "list.dash")
+                    Text("Countries")
+                }
+        }
     }
 }
 
