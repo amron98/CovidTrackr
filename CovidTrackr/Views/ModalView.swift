@@ -19,8 +19,8 @@ struct ModalView: View {
     
     var body: some View {
         Text("\(country.country!) clicked")
-        LineChartView(title: country.country!, timeline: timeline)
-            .padding()
+//        LineChartView(title: country.country!, timeline: timeline)
+//            .padding()
     }
         
 }
