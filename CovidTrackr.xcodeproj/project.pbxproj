@@ -18,7 +18,6 @@
 		1099285B297A414E00089FDA /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1099285A297A414D00089FDA /* DashboardViewModel.swift */; };
 		1099285F297A930C00089FDA /* LineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1099285E297A930C00089FDA /* LineChartView.swift */; };
 		10992861297A95D000089FDA /* BarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10992860297A95D000089FDA /* BarChartView.swift */; };
-		10A784EE29824E8F00C3F708 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10A784ED29824E8F00C3F708 /* MapView.swift */; };
 		10A784F12982A99200C3F708 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10A784F02982A99100C3F708 /* Utils.swift */; };
 		10CC169E297DE50D0090B148 /* CountryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10CC169D297DE50D0090B148 /* CountryListView.swift */; };
 		10CC16A1297DE9390090B148 /* RowData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10CC16A0297DE9390090B148 /* RowData.swift */; };
@@ -40,7 +39,6 @@
 		1099285A297A414D00089FDA /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
 		1099285E297A930C00089FDA /* LineChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartView.swift; sourceTree = "<group>"; };
 		10992860297A95D000089FDA /* BarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartView.swift; sourceTree = "<group>"; };
-		10A784ED29824E8F00C3F708 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		10A784F02982A99100C3F708 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		10CC169D297DE50D0090B148 /* CountryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryListView.swift; sourceTree = "<group>"; };
 		10CC16A0297DE9390090B148 /* RowData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowData.swift; sourceTree = "<group>"; };
@@ -126,7 +124,6 @@
 				1099285E297A930C00089FDA /* LineChartView.swift */,
 				10992860297A95D000089FDA /* BarChartView.swift */,
 				10F672D4297FDE1C00E72C83 /* ModalView.swift */,
-				10A784ED29824E8F00C3F708 /* MapView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -230,7 +227,6 @@
 				10992861297A95D000089FDA /* BarChartView.swift in Sources */,
 				10A784F12982A99200C3F708 /* Utils.swift in Sources */,
 				1099284C2977A33000089FDA /* APIService.swift in Sources */,
-				10A784EE29824E8F00C3F708 /* MapView.swift in Sources */,
 				1099285B297A414E00089FDA /* DashboardViewModel.swift in Sources */,
 				10CC169E297DE50D0090B148 /* CountryListView.swift in Sources */,
 				10F672D5297FDE1C00E72C83 /* ModalView.swift in Sources */,
