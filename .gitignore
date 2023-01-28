@@ -6,6 +6,9 @@
 #
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
+## Access Tokens
+info.plist
+
 ## User settings
 xcuserdata/
 
