@@ -29,6 +29,11 @@ struct ContentView: View {
                     Image(systemName: "list.dash")
                     Text("Countries")
                 }
+            WorldMapView()
+                .tabItem{
+                    Image(systemName: "globe")
+                    Text("World Map")
+                }
         }
     }
 }
