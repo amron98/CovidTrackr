@@ -96,7 +96,6 @@ class WorldMapViewController: UIViewController {
         layer.source = sourceID
         layer.sourceLayer = "country_boundaries"
         
-
         // Build a GL match expression that defines the color for every vector tile feature
         // https://docs.mapbox.com/mapbox-gl-js/style-spec/expressions/#match
         // Use the ISO 3166-1 alpha 3 code as the lookup key for the country shape
@@ -116,7 +115,7 @@ class WorldMapViewController: UIViewController {
             let ratio = Double(country.cases)/Double(max_cases) * 255 + 20
             // Convert the range of data values to a suitable color
             red = (ratio > 255) ? 255 : ratio
-            print("\(country.code): \(red)")
+            
             expressionBody += """
             "\(country.code)",
             "rgb(255, \(255 - red), \(255 - red))",
