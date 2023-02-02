@@ -12,6 +12,7 @@ class DashboardViewModel: ObservableObject {
     @Published var countryData: [CountryData] = []
     @Published var currentGlobalCases: Int = 3 // For debugging
     @Published var currentGlobalDeaths: Int = 0
+    @Published var worldometers: [Worldometers] = []
     
     enum SortBy {
         case cases, deaths
@@ -20,6 +21,7 @@ class DashboardViewModel: ObservableObject {
     init(){
         self.fetchCountryData()
         self.fetchGlobalTimeline()
+        self.fetchWorldometers()
     }
     
     // Filter (multiple) countries with multiple provinces into one country with cumulative data
@@ -65,6 +67,13 @@ class DashboardViewModel: ObservableObject {
       
     }
     
+    // Returns Worldometers data for a given (JHUCSSE) country name
+    func getWorldometersData(for country: String) -> Worldometers?{
+        return self.worldometers.first { Worldometers in
+            Worldometers.country == country
+        }
+    }
+    
     // Makes an API fetch to update globalTimeline data
     func fetchGlobalTimeline() {
         DispatchQueue.global().async {
@@ -83,6 +92,24 @@ class DashboardViewModel: ObservableObject {
             }
         }
             
+    }
+    
+    // Fetches country data from the worldometers API
+    func fetchWorldometers() {
+        DispatchQueue.global().async {
+            APIService.fetchData(for: URL(string: "https://disease.sh/v3/covid-19/countries")!) { (result: Result<[Worldometers], Error>) in
+                switch result {
+                case .success(let responseData):
+                    DispatchQueue.main.async {
+                        self.worldometers = responseData
+                    }
+                case .failure(let error):
+                    print("Error fetching worldometers data")
+                    print(error)
+                }
+                
+            }
+        }
     }
     
     // Makes an API fetch to get timeline data for a country
