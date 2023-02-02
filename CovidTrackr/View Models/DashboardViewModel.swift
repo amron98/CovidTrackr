@@ -62,13 +62,35 @@ class DashboardViewModel: ObservableObject {
             return updatedCountry
         })
         
-
+        // Remove duplicates from result array and sort by country name
+        result = Array(Set(result)).sorted {val1, val2 in
+            val1.country! < val2.country!
+        }
+        
+        // Remove non-country data
+        result.removeAll { CountryData in
+            CountryData.country == "Antarctica"
+            || CountryData.country == "Diamond Princess"
+            || CountryData.country == "MS Zaandam"
+            || CountryData.country == "Summer Olympics 2020"
+            || CountryData.country == "Winter Olympics 2022"
+        }
         return result
       
     }
     
     // Returns Worldometers data for a given (JHUCSSE) country name
     func getWorldometersData(for country: String) -> Worldometers?{
+        // Use an adjusted name if the provided country name has name-mapping issue
+        if let correctName = countryNamesMap[country] {
+            // Find the worldometers data for the adjusted country name
+            let result = self.worldometers.first { Worldometers in
+                Worldometers.country == correctName
+            }
+                        
+            return result
+        }
+        // Otherwise, return the worldometers data for the actual country
         return self.worldometers.first { Worldometers in
             Worldometers.country == country
         }

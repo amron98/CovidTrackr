@@ -31,3 +31,25 @@ public struct CountryInfo: Decodable {
         self.flag = URL(string: flag!)!
     }
 }
+
+// Dictionary that maps JHUCSSE country name to Worldometers country name for inconsistently named countries
+var countryNamesMap: [String:String] = [
+    "Bosnia and Herzegovina"    : "Bosnia",
+    "Burma"                     : "Myanmar",
+    "Congo (Brazzaville)"       : "Congo",
+    "Congo (Kinshasa)"          : "DRC",
+    "Cote d'Ivoire"             : "Côte d'Ivoire",
+    "Eswatini"                  : "Swaziland",
+    "Holy See"                  : "Holy See (Vatican City State)",
+    "Korea, North"              : "N. Korea",
+    "Korea, South"              : "S. Korea",
+    "Laos"                      : "Lao People's Democratic Republic",
+    "Libya"                     : "Libyan Arab Jamahiriya",
+    "North Macedonia"           : "Macedonia",
+    "Syria"                     : "Syrian Arab Republic",
+    "Taiwan*"                   : "Taiwan",
+    "United Arab Emirates"      : "UAE",
+    "United Kingdom"            : "UK",
+    "US"                        : "USA",
+    "West Bank and Gaza"        : "Palestine"
+]
