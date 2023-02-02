@@ -17,6 +17,54 @@ class DashboardViewModel: ObservableObject {
         case cases, deaths
     }
     
+    init(){
+        self.fetchCountryData()
+        self.fetchGlobalTimeline()
+    }
+    
+    // Filter (multiple) countries with multiple provinces into one country with cumulative data
+    func filterMultipleProvinces(data: [CountryData]) -> [CountryData] {
+        var result: [CountryData] = []
+        var multiProvinceTracker: [String: (provinces: Set<String>, stats: CovidStats)] = [:]
+        
+        // Build the multi-province tracker dictionary
+        for entry in data {
+            // Extract properties
+            let country = entry.country!
+            
+            // Only process countries with multiple (non-nil) provinces
+            if let province = entry.province {
+
+                // Initialize dictionary entry for a new country
+                if multiProvinceTracker[country] == nil {
+                    multiProvinceTracker[country] = (provinces: Set<String>(), stats: CovidStats(confirmed: 0, deaths: 0))
+                }
+                
+                // Insert province into tracker
+                multiProvinceTracker[country]!.provinces.insert(province)
+                
+                // Update covid stats into tracker (cumulative)
+                multiProvinceTracker[country]!.stats.confirmed = multiProvinceTracker[country]!.stats.confirmed  + entry.stats!.confirmed
+                multiProvinceTracker[country]!.stats.deaths = multiProvinceTracker[country]!.stats.deaths + entry.stats!.deaths
+            }
+        }
+        
+        // Build the result array
+        result = data.map({ country in
+            var updatedCountry = country
+            
+            // Update stats for multi-province countries
+            if (multiProvinceTracker[country.country!] != nil) {
+                updatedCountry.stats = multiProvinceTracker[country.country!]?.stats
+            }
+            return updatedCountry
+        })
+        
+
+        return result
+      
+    }
+    
     // Makes an API fetch to update globalTimeline data
     func fetchGlobalTimeline() {
         DispatchQueue.global().async {
@@ -65,7 +113,7 @@ class DashboardViewModel: ObservableObject {
                 switch result {
                 case .success(let responseData):
                     DispatchQueue.main.async {
-                        self.countryData = responseData
+                        self.countryData = self.filterMultipleProvinces(data: responseData)
                         print("Updated country data in view model")
                     }
                 case .failure(let error):
