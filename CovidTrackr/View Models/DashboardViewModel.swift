@@ -12,9 +12,88 @@ class DashboardViewModel: ObservableObject {
     @Published var countryData: [CountryData] = []
     @Published var currentGlobalCases: Int = 3 // For debugging
     @Published var currentGlobalDeaths: Int = 0
+    @Published var worldometers: [Worldometers] = []
     
     enum SortBy {
         case cases, deaths
+    }
+    
+    init(){
+        self.fetchCountryData()
+        self.fetchGlobalTimeline()
+        self.fetchWorldometers()
+    }
+    
+    // Filter (multiple) countries with multiple provinces into one country with cumulative data
+    func filterMultipleProvinces(data: [CountryData]) -> [CountryData] {
+        var result: [CountryData] = []
+        var multiProvinceTracker: [String: (provinces: Set<String>, stats: CovidStats)] = [:]
+        
+        // Build the multi-province tracker dictionary
+        for entry in data {
+            // Extract properties
+            let country = entry.country!
+            
+            // Only process countries with multiple (non-nil) provinces
+            if let province = entry.province {
+
+                // Initialize dictionary entry for a new country
+                if multiProvinceTracker[country] == nil {
+                    multiProvinceTracker[country] = (provinces: Set<String>(), stats: CovidStats(confirmed: 0, deaths: 0))
+                }
+                
+                // Insert province into tracker
+                multiProvinceTracker[country]!.provinces.insert(province)
+                
+                // Update covid stats into tracker (cumulative)
+                multiProvinceTracker[country]!.stats.confirmed = multiProvinceTracker[country]!.stats.confirmed  + entry.stats!.confirmed
+                multiProvinceTracker[country]!.stats.deaths = multiProvinceTracker[country]!.stats.deaths + entry.stats!.deaths
+            }
+        }
+        
+        // Build the result array
+        result = data.map({ country in
+            var updatedCountry = country
+            
+            // Update stats for multi-province countries
+            if (multiProvinceTracker[country.country!] != nil) {
+                updatedCountry.stats = multiProvinceTracker[country.country!]?.stats
+            }
+            return updatedCountry
+        })
+        
+        // Remove duplicates from result array and sort by country name
+        result = Array(Set(result)).sorted {val1, val2 in
+            val1.country! < val2.country!
+        }
+        
+        // Remove non-country data
+        result.removeAll { CountryData in
+            CountryData.country == "Antarctica"
+            || CountryData.country == "Diamond Princess"
+            || CountryData.country == "MS Zaandam"
+            || CountryData.country == "Summer Olympics 2020"
+            || CountryData.country == "Winter Olympics 2022"
+        }
+        return result
+      
+    }
+    
+    // Returns Worldometers data for a given (JHUCSSE) country name
+    func getWorldometersData(for country: String) -> Worldometers?{
+        // Use an adjusted name if the provided country name has name-mapping issue
+        if let correctName = countryNamesMap[country] {
+            // Find the worldometers data for the adjusted country name
+            let result = self.worldometers.first { Worldometers in
+                Worldometers.country == correctName
+            }
+                        
+            return result
+        }
+        // Otherwise, return the worldometers data for the actual country
+        return self.worldometers.first { Worldometers in
+            Worldometers.country == country
+        }
     }
     
     // Makes an API fetch to update globalTimeline data
@@ -35,6 +114,24 @@ class DashboardViewModel: ObservableObject {
             }
         }
             
+    }
+    
+    // Fetches country data from the worldometers API
+    func fetchWorldometers() {
+        DispatchQueue.global().async {
+            APIService.fetchData(for: URL(string: "https://disease.sh/v3/covid-19/countries")!) { (result: Result<[Worldometers], Error>) in
+                switch result {
+                case .success(let responseData):
+                    DispatchQueue.main.async {
+                        self.worldometers = responseData
+                    }
+                case .failure(let error):
+                    print("Error fetching worldometers data")
+                    print(error)
+                }
+                
+            }
+        }
     }
     
     // Makes an API fetch to get timeline data for a country
@@ -65,7 +162,7 @@ class DashboardViewModel: ObservableObject {
                 switch result {
                 case .success(let responseData):
                     DispatchQueue.main.async {
-                        self.countryData = responseData
+                        self.countryData = self.filterMultipleProvinces(data: responseData)
                         print("Updated country data in view model")
                     }
                 case .failure(let error):

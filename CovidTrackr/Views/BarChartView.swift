@@ -81,7 +81,14 @@ struct BarChartView: View {
             ForEach(topFive, id: \.country) {item in
                 
                 BarMark(
-                    x: .value("Country", item.country!),
+                    x: .value(
+                        "Country",
+                        Utils.getFlag(
+                            from: (viewModel
+                                .getWorldometersData(for: item.country!)?
+                                .countryInfo?.iso2) ?? "🏁"
+                        )
+                    ),
                     y: .value("", (currentTab == "Cases") ? item.stats?.confirmed ?? 2 : item.stats?.deaths ?? 2),
                     width: 50
                     
@@ -105,10 +112,13 @@ struct BarChartView: View {
             
         }
         .chartXAxis {
-            AxisMarks(position: .bottom) { _ in
+            AxisMarks(position: .bottom) {
+                let value = $0.as(String.self)!
                 AxisGridLine().foregroundStyle(.clear)
                 AxisTick().foregroundStyle(.clear)
-                AxisValueLabel()
+                AxisValueLabel{
+                    Text(value).font(SwiftUI.Font.title)
+                }
             }
         }
         .frame(maxHeight: 200)

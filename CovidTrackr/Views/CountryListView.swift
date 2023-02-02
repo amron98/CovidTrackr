@@ -36,7 +36,12 @@ struct CountryListView: View {
     var body: some View {
         NavigationView {
             List(searchResults){ country in
-                let rowData = RowData(country: country.country ?? "", confirmed: country.stats?.confirmed ?? 0, deaths: country.stats?.deaths ?? 0, flag: "🇺🇸")
+                let rowData = RowData(country: country.country ?? "", confirmed: country.stats?.confirmed ?? 0, deaths: country.stats?.deaths ?? 0, flag: Utils.getFlag(
+                        from: (viewModel
+                                .getWorldometersData(for: country.country!)?
+                                .countryInfo?
+                                .iso2) ?? "🏁"
+                ))
                 
                 
                 RowView(data: rowData)

@@ -13,8 +13,6 @@ struct ContentView: View {
     
     init(){
         self.dashboardViewModel = DashboardViewModel()
-        self.dashboardViewModel.fetchCountryData()
-        self.dashboardViewModel.fetchGlobalTimeline()
     }
     var body: some View {
         TabView {
@@ -29,6 +27,7 @@ struct ContentView: View {
                     Image(systemName: "list.dash")
                     Text("Countries")
                 }
+            
             WorldMapView()
                 .tabItem{
                     Image(systemName: "globe")
