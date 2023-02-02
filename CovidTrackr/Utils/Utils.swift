@@ -28,5 +28,14 @@ struct Utils {
         return String(format: "%.1f%@", doubleValue, suffix[i]).replacingOccurrences(of: ".0", with: "")
     }
     
+    // Get flag emoji for a given country
+    static func getFlag(from countryCode: String) -> String {
+        countryCode
+            .unicodeScalars
+            .map({ 127397 + $0.value })
+            .compactMap(UnicodeScalar.init)
+            .map(String.init)
+            .joined()
+    }
     
 }
