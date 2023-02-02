@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		106D015629851B9300BBB03E /* MapboxMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 106D015529851B9300BBB03E /* MapboxMaps */; };
 		106D015829851BB800BBB03E /* WorldMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106D015729851BB800BBB03E /* WorldMapView.swift */; };
+		106D016F2989193100BBB03E /* Worldometers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106D016E2989193000BBB03E /* Worldometers.swift */; };
 		1099283529777AA100089FDA /* CovidTrackrApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1099283429777AA100089FDA /* CovidTrackrApp.swift */; };
 		1099283729777AA100089FDA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1099283629777AA100089FDA /* ContentView.swift */; };
 		1099283929777AA200089FDA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1099283829777AA200089FDA /* Assets.xcassets */; };
@@ -29,6 +30,7 @@
 /* Begin PBXFileReference section */
 		106D015729851BB800BBB03E /* WorldMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldMapView.swift; sourceTree = "<group>"; };
 		106D015929851DE500BBB03E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		106D016E2989193000BBB03E /* Worldometers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Worldometers.swift; sourceTree = "<group>"; };
 		1099283129777AA100089FDA /* CovidTrackr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CovidTrackr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1099283429777AA100089FDA /* CovidTrackrApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CovidTrackrApp.swift; sourceTree = "<group>"; };
 		1099283629777AA100089FDA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 			isa = PBXGroup;
 			children = (
 				1099284629779B1F00089FDA /* CountryData.swift */,
+				106D016E2989193000BBB03E /* Worldometers.swift */,
 				1099284F29784E6700089FDA /* Timeline.swift */,
 			);
 			path = Models;
@@ -244,6 +247,7 @@
 				10CC169E297DE50D0090B148 /* CountryListView.swift in Sources */,
 				106D015829851BB800BBB03E /* WorldMapView.swift in Sources */,
 				10F672D5297FDE1C00E72C83 /* ModalView.swift in Sources */,
+				106D016F2989193100BBB03E /* Worldometers.swift in Sources */,
 				1099284729779B1F00089FDA /* CountryData.swift in Sources */,
 				1099283529777AA100089FDA /* CovidTrackrApp.swift in Sources */,
 				10CC16A1297DE9390090B148 /* RowData.swift in Sources */,
