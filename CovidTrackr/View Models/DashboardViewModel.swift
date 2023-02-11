@@ -98,39 +98,28 @@ class DashboardViewModel: ObservableObject {
     
     // Makes an API fetch to update globalTimeline data
     func fetchGlobalTimeline() {
-        DispatchQueue.global().async {
-            APIService.fetchData(for: URL(string: "https://disease.sh/v3/covid-19/historical/all?lastdays=all")!) { (result: Result<Timeline, Error>) in
-                switch result {
-                case .success(let responseData):
-                    DispatchQueue.main.async {
-                        self.globalTimeline = responseData
-                        print("Updated global timeline data in view model")
-                    }
-                case .failure(let error):
-                    print("Error fetching global timeline data")
-                    print(error)
-                    
-                }
-            }
+        let response = APIService.fetchDataSync(for: URL(string: "https://disease.sh/v3/covid-19/historical/all?lastdays=all")!) as Result<Timeline, Error>
+        
+        switch response{
+        case .success(let data):
+            self.globalTimeline = data
+        case.failure(let error):
+            print("Error loading JHUCSSE timeline data (global)")
+            print(error)
         }
             
     }
     
     // Fetches country data from the worldometers API
     func fetchWorldometers() {
-        DispatchQueue.global().async {
-            APIService.fetchData(for: URL(string: "https://disease.sh/v3/covid-19/countries")!) { (result: Result<[Worldometers], Error>) in
-                switch result {
-                case .success(let responseData):
-                    DispatchQueue.main.async {
-                        self.worldometers = responseData
-                    }
-                case .failure(let error):
-                    print("Error fetching worldometers data")
-                    print(error)
-                }
-                
-            }
+        let response = APIService.fetchDataSync(for: URL(string: "https://disease.sh/v3/covid-19/countries")!) as Result<[Worldometers], Error>
+      
+        switch response {
+        case .success(let responseData):
+            self.worldometers = responseData
+        case .failure(let error):
+            print("Error fetching worldometers data")
+            print(error)
         }
     }
     
@@ -157,20 +146,15 @@ class DashboardViewModel: ObservableObject {
     
     // Makes an API fetch to update countryData data
     func fetchCountryData() {
-        DispatchQueue.global().async {
-            APIService.fetchData(for: URL(string: "https://disease.sh/v3/covid-19/jhucsse")!) { (result: Result<[CountryData], Error>) in
-                switch result {
-                case .success(let responseData):
-                    DispatchQueue.main.async {
-                        self.countryData = self.filterMultipleProvinces(data: responseData)
-                        print("Updated country data in view model")
-                    }
-                case .failure(let error):
-                    print("Error fetching global timeline data")
-                    print(error)
-                    
-                }
-            }
+        let response = APIService.fetchDataSync(for: URL(string: "https://disease.sh/v3/covid-19/jhucsse")!) as Result<[CountryData], Error>
+        
+        switch response {
+        case .success(let data):
+            self.countryData = self.filterMultipleProvinces(data: data)
+        case .failure(let error):
+            print("Error loading JHUCSSE country (all) data")
+            print(error)
+            
         }
     }
     

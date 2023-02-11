@@ -44,4 +44,15 @@ struct APIService {
          task.resume()
      }
 
+    // Fetches data synchronously
+    static func fetchDataSync<T: Decodable>(for url: URL) -> Result<T, Error> {
+        var result: Result<T, Error>!
+        let semaphore = DispatchSemaphore(value: 0)
+        APIService.fetchData(for: url) { completionResult in
+            result = completionResult
+            semaphore.signal()
+        }
+        semaphore.wait()
+        return result
+    }
 }
