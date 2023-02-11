@@ -19,20 +19,30 @@ struct LineChartView: View {
     @State var currentTab: String = "Cases"
     @State var currentTotal: Int = 0
     @State var animate = false
+    @State var title: String
     
-    
-    var chartTitle: String = ""
-    var timeline: Timeline
-    
-    init(title: String, timeline: Timeline){
-        self.chartTitle = String(stringLiteral: title)
-        self.timeline = timeline
+    @Binding var timeline: Timeline {
+        didSet {
+            
+            if (currentTab == "Cases") {
+                let cases = timeline.getCasesFormatted()
+                
+                chartData = cases
+                currentTotal = cases.first?.value ?? 6
+            }else {
+                let deaths = timeline.getDeathsFormatted()
+                
+                chartData = deaths
+                currentTotal = deaths.first?.value ?? 6
+            }
+        }
     }
+    
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack{
-                Text("\(chartTitle)")
+                Text("\(title)")
                     .font(.headline.bold())
  
                 
@@ -74,9 +84,9 @@ struct LineChartView: View {
             
 
             // Re-Animating View
-            animateGraph(fromChange: true)
+//            animateGraph(fromChange: true)
         }.onAppear {
-            self.currentTotal = timeline.getCasesFormatted().last?.value ?? 4
+            self.currentTotal = timeline.getCasesFormatted().first?.value ?? 4
             self.chartData = timeline.getCasesFormatted()
         }
     }

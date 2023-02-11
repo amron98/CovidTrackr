@@ -71,6 +71,15 @@ struct BarChartView: View {
             // Re-Animating View
             animateGraph(fromChange: true)
         }
+        .onAppear {
+            topFive = (currentTab == "Cases") ?
+                Array(viewModel.countryData.sorted(){
+                    $0.stats!.confirmed > $1.stats!.confirmed
+                }.prefix(5)) :
+                Array(viewModel.countryData.sorted(){
+                $0.stats!.deaths > $1.stats!.deaths
+                }.prefix(5))
+        }
         
     }
     
