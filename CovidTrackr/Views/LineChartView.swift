@@ -15,7 +15,7 @@ struct LineChartView: View {
     
     @Environment(\.colorScheme) var colorScheme
     
-    @State var chartData = [(key: Date, value: Int)]()
+    @State var chartData: [ChartData] = []
     @State var currentTab: String = "Cases"
     @State var currentTotal: Int = 0
     @State var animate = false
@@ -95,10 +95,10 @@ struct LineChartView: View {
     func AnimatedChart()->some View {
 
         Chart {
-            ForEach(chartData, id: \.0) {item in
+            ForEach(chartData, id: \.date) {item in
                 
                 LineMark(
-                    x: .value("Date", item.key),
+                    x: .value("Date", item.date),
                     y: .value("", item.value)
                     
                 )
@@ -107,7 +107,7 @@ struct LineChartView: View {
                 
                 
                 AreaMark(
-                    x: .value("Date", item.key),
+                    x: .value("Date", item.date),
                     y: .value("", item.value)
                 )
                 .interpolationMethod(.catmullRom)
