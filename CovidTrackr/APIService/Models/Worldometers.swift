@@ -33,23 +33,47 @@ public struct CountryInfo: Decodable {
 }
 
 // Dictionary that maps JHUCSSE country name to Worldometers country name for inconsistently named countries
-var countryNamesMap: [String:String] = [
-    "Bosnia and Herzegovina"    : "Bosnia",
-    "Burma"                     : "Myanmar",
-    "Congo (Brazzaville)"       : "Congo",
-    "Congo (Kinshasa)"          : "DRC",
-    "Cote d'Ivoire"             : "Côte d'Ivoire",
-    "Eswatini"                  : "Swaziland",
-    "Holy See"                  : "Holy See (Vatican City State)",
-    "Korea, North"              : "N. Korea",
-    "Korea, South"              : "S. Korea",
-    "Laos"                      : "Lao People's Democratic Republic",
-    "Libya"                     : "Libyan Arab Jamahiriya",
-    "North Macedonia"           : "Macedonia",
-    "Syria"                     : "Syrian Arab Republic",
-    "Taiwan*"                   : "Taiwan",
-    "United Arab Emirates"      : "UAE",
-    "United Kingdom"            : "UK",
-    "US"                        : "USA",
-    "West Bank and Gaza"        : "Palestine"
+var jhuNamesMap: [String:String] = [
+    "Bosnia and Herzegovina"        : "Bosnia",
+    "Burma"                         : "Myanmar",
+    "Congo (Brazzaville)"           : "Congo",
+    "Republic of the Congo"         : "Congo",
+    "Congo (Kinshasa)"              : "DRC",
+    "Democratic Republic of the Congo"   : "DRC",
+    "Cote d'Ivoire"                 : "Côte d'Ivoire",
+    "Eswatini"                      : "Swaziland",
+    "Holy See"                      : "Holy See (Vatican City State)",
+    "Korea, North"                  : "N. Korea",
+    "Korea, South"                  : "S. Korea",
+    "Laos"                          : "Lao People's Democratic Republic",
+    "Libya"                         : "Libyan Arab Jamahiriya",
+    "North Macedonia"               : "Macedonia",
+    "Syria"                         : "Syrian Arab Republic",
+    "Taiwan*"                       : "Taiwan",
+    "United Arab Emirates"          : "UAE",
+    "United Kingdom"                : "UK",
+    "US"                            : "USA",
+    "United States"                 : "USA",
+    "West Bank and Gaza"            : "Palestine"
+]
+
+var wmNamesMap: [String:String] = [
+    "Bosnia"                        : "Bosnia and Herzegovina",
+    "Myanmar"                       : "Burma",
+    "Congo"                         : "Congo (Brazzaville)",
+    "DRC"                           : "Congo (Kinshasa)",
+    "Côte d'Ivoire"                 : "Cote d'Ivoire",
+    "Swaziland"                     : "Eswatini",
+    "Holy See (Vatican City State)" : "Holy See",
+    "N. Korea"                      : "Korea, North",
+    "S. Korea"                      : "Korea, South",
+    "Lao People's Democratic Republic" : "Laos",
+    "Libyan Arab Jamahiriya"        : "Libya",
+    "Macedonia"                     : "North Macedonia",
+    "Syrian Arab Republic"          : "Syria",
+    "Taiwan"                        : "Taiwan*",
+    "UAE"                           : "United Arab Emirates",
+    "UK"                            : "United Kingdom",
+    "USA"                           : "US",
+    "West Bank and Gaza"            : "Palestine"
 ]

@@ -15,7 +15,7 @@ struct BarChartView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @State var currentTab: String = "Cases"
-    @State var topFive : [CountryData] = []
+    @State var topFive : [Country] = []
     @State var animate = false
     
     @State var max = 1000000000
@@ -23,7 +23,7 @@ struct BarChartView: View {
     
     init(viewModel: DashboardViewModel){
         self.viewModel = viewModel
-        self.topFive = viewModel.countryData.sorted(){
+        self.topFive = viewModel.countries.sorted(){
             $0.stats!.confirmed > $1.stats!.confirmed
         }
     }
@@ -61,9 +61,9 @@ struct BarChartView: View {
                 )
         }
         .onChange(of: currentTab){newValue in
-            topFive = (currentTab == "Cases") ? Array(viewModel.countryData.sorted(){
+            topFive = (currentTab == "Cases") ? Array(viewModel.countries.sorted(){
                 $0.stats!.confirmed > $1.stats!.confirmed
-            }.prefix(5)) : Array(viewModel.countryData.sorted(){
+            }.prefix(5)) : Array(viewModel.countries.sorted(){
                 $0.stats!.deaths > $1.stats!.deaths
             }.prefix(5))
             
@@ -73,11 +73,11 @@ struct BarChartView: View {
         }
         .onAppear {
             topFive = (currentTab == "Cases") ?
-                Array(viewModel.countryData.sorted(){
+                Array(viewModel.countries.sorted(){
                     $0.stats!.confirmed > $1.stats!.confirmed
                 }.prefix(5)) :
-                Array(viewModel.countryData.sorted(){
-                $0.stats!.deaths > $1.stats!.deaths
+                Array(viewModel.countries.sorted(){
+                    $0.stats!.deaths > $1.stats!.deaths
                 }.prefix(5))
         }
         
@@ -87,14 +87,14 @@ struct BarChartView: View {
     func AnimatedChart()->some View {
 
         Chart {
-            ForEach(topFive, id: \.country) {item in
+            ForEach(topFive, id: \.name) {item in
                 
                 BarMark(
                     x: .value(
                         "Country",
                         Utils.getFlag(
                             from: (viewModel
-                                .getWorldometersData(for: item.country!)?
+                                .getWorldometersData(for: item.name)?
                                 .countryInfo?.iso2) ?? "🏁"
                         )
                     ),

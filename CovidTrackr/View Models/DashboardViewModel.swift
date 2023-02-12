@@ -14,6 +14,8 @@ class DashboardViewModel: ObservableObject {
     @Published var currentGlobalDeaths: Int = 0
     @Published var worldometers: [Worldometers] = []
     
+    @Published var countries: [Country] = []
+    
     enum SortBy {
         case cases, deaths
     }
@@ -22,6 +24,52 @@ class DashboardViewModel: ObservableObject {
         self.fetchCountryData()
         self.fetchGlobalTimeline()
         self.fetchWorldometers()
+        self.normalizeData()
+    }
+    
+    // Normalize country data
+    func normalizeData(){
+        var countryDict = [String:Country]()
+        
+        // Merge JHUCSSE data
+        for jhuCountry in countryData {
+            let name = jhuCountry.country!
+            let stats = jhuCountry.stats!
+            
+            // Check if country is in dictionary, or create new
+            let country = countryDict[name] ?? Country(
+                name: name,
+                stats: stats
+            )
+            
+            countryDict[name] = country
+        }
+        
+        // Merge WM data
+        for wmCountry in worldometers {
+            
+            var name = ""
+            if let jhuName = wmNamesMap[wmCountry.country!] {
+                name = jhuName
+            }else{
+                name = wmCountry.country!
+            }
+            
+            let info = wmCountry.countryInfo!
+            let continent = wmCountry.continent!
+            
+            // Proceed only if there is corresponding JHUCountry data in the dictionary
+            if var country = countryDict[name] {
+                country.info = info
+                country.continent = continent
+                
+                // Update dictionary
+                countryDict[name] = country
+            }
+        }
+        
+        // Update countries as normalized data
+        self.countries = Array(countryDict.values)
     }
     
     // Filter (multiple) countries with multiple provinces into one country with cumulative data
@@ -82,7 +130,7 @@ class DashboardViewModel: ObservableObject {
     // Returns Worldometers data for a given (JHUCSSE) country name
     func getWorldometersData(for country: String) -> Worldometers?{
         // Use an adjusted name if the provided country name has name-mapping issue
-        if let correctName = countryNamesMap[country] {
+        if let correctName = jhuNamesMap[country] {
             // Find the worldometers data for the adjusted country name
             let result = self.worldometers.first { Worldometers in
                 Worldometers.country == correctName
