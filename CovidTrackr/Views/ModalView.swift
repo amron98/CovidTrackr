@@ -9,18 +9,11 @@ import SwiftUI
 
 struct ModalView: View {
 
-    var country: CountryData
+    var country: Country
     var timeline: Timeline
     
-    init(country: CountryData, timeline: Timeline) {
-        self.country = country
-        self.timeline = timeline
-    }
-    
     var body: some View {
-        Text("\(country.country!) clicked")
-//        LineChartView(title: country.country!, timeline: timeline)
-//            .padding()
+        Text("\(country.name) clicked")
     }
         
 }

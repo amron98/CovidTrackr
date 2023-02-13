@@ -9,7 +9,7 @@ import SwiftUI
 
 // Note: This will eventually be part of the CountryListViewModel
 class Selection: ObservableObject {
-    @Published var selectedCountry: CountryData? = nil
+    @Published var selectedCountry: Country? = nil
 }
 
 struct CountryListView: View {
@@ -21,13 +21,13 @@ struct CountryListView: View {
     @State var showModal: Bool = false
 
     // Used to store a filtered list of countries based on the searchVal
-    var searchResults: [CountryData] {
+    var searchResults: [Country] {
         if searchVal.isEmpty {
-            return viewModel.countryData
+            return viewModel.countries
         }
         else {
-            return viewModel.countryData.filter({ country in
-                country.country?.contains(searchVal) ?? false
+            return viewModel.countries.filter({ country in
+                country.name.contains(searchVal)
             })
         }
     }
@@ -36,9 +36,9 @@ struct CountryListView: View {
     var body: some View {
         NavigationView {
             List(searchResults){ country in
-                let rowData = RowData(country: country.country ?? "", confirmed: country.stats?.confirmed ?? 0, deaths: country.stats?.deaths ?? 0, flag: Utils.getFlag(
+                let rowData = RowData(country: country.name, confirmed: country.stats?.confirmed ?? 0, deaths: country.stats?.deaths ?? 0, flag: Utils.getFlag(
                         from: (viewModel
-                                .getWorldometersData(for: country.country!)?
+                                .getWorldometersData(for: country.name)?
                                 .countryInfo?
                                 .iso2) ?? "🏁"
                 ))
@@ -50,12 +50,18 @@ struct CountryListView: View {
                         showModal.toggle()
                         selection.selectedCountry = country
                     }
-                    .sheet(isPresented: $showModal, content: {
-                        ModalView(country: selection.selectedCountry ?? country, timeline: viewModel.globalTimeline)
-                            .presentationDragIndicator(.visible)
-                            .presentationDetents([.height(500)])
-                    })
+
             }
+            .sheet(
+                isPresented: $showModal,
+                content: {
+                    ModalView(
+                        country: selection.selectedCountry!,
+                        timeline: viewModel.globalTimeline
+                    )
+                    .presentationDragIndicator(.visible)
+                    .presentationDetents([.height(500)])
+            })
             .listStyle(.plain)
             .navigationBarTitle("Countries")
         }
