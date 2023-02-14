@@ -42,7 +42,7 @@ struct CountryListView: View {
             List {
                 ForEach(groupedCountries.keys.sorted(), id: \.self) { key in
                     Section(header: Text(key)){
-                        ForEach(self.groupedCountries[key]!) { country in
+                        ForEach(self.groupedCountries[key]!.sorted{ $0.name < $1.name }) { country in
                             let rowData = RowData(
                                 country: country.name,
                                 confirmed: country.stats?.confirmed ?? 0,
