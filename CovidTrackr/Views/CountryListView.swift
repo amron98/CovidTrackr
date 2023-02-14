@@ -20,7 +20,7 @@ struct CountryListView: View {
     @State var searchVal: String = ""
     @State var showModal: Bool = false
 
-    // Used to store a filtered list of countries based on the searchVal
+    // Filters countries based on the searchVal
     var searchResults: [Country] {
         if searchVal.isEmpty {
             return viewModel.countries
@@ -31,26 +31,36 @@ struct CountryListView: View {
             })
         }
     }
-
+    
+    // Creates grouping of countries by first letter
+    var groupedCountries: [String: [Country]] {
+        Dictionary(grouping: searchResults, by: { String($0.name.first!) })
+    }
     
     var body: some View {
         NavigationView {
-            List(searchResults){ country in
-                let rowData = RowData(country: country.name, confirmed: country.stats?.confirmed ?? 0, deaths: country.stats?.deaths ?? 0, flag: Utils.getFlag(
-                        from: (viewModel
-                                .getWorldometersData(for: country.name)?
-                                .countryInfo?
-                                .iso2) ?? "🏁"
-                ))
-                
-                
-                RowView(data: rowData)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        showModal.toggle()
-                        selection.selectedCountry = country
-                    }
+            List {
+                ForEach(groupedCountries.keys.sorted(), id: \.self) { key in
+                    Section(header: Text(key)){
+                        ForEach(self.groupedCountries[key]!) { country in
+                            let rowData = RowData(
+                                country: country.name,
+                                confirmed: country.stats?.confirmed ?? 0,
+                                deaths: country.stats?.deaths ?? 0,
+                                flag: Utils.getFlag(from: (country.info?.iso2) ?? "🏁")
+                            )
+                            
+                            
+                            RowView(data: rowData)
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    showModal.toggle()
+                                    selection.selectedCountry = country
+                                }
 
+                        }
+                    }
+                }
             }
             .sheet(
                 isPresented: $showModal,
@@ -62,7 +72,7 @@ struct CountryListView: View {
                     .presentationDragIndicator(.visible)
                     .presentationDetents([.height(500)])
             })
-            .listStyle(.plain)
+            .listStyle(.automatic)
             .navigationBarTitle("Countries")
         }
         .searchable(text: $searchVal, placement: .navigationBarDrawer(displayMode: .always))
@@ -74,7 +84,7 @@ struct RowView : View {
     
     var body: some View {
         HStack(alignment: .center) {
-            Text(data.flag).font(.custom("Hi", size: 24))
+            Text(data.flag).font(.custom("Arial", size: 24))
             Text(data.country).font(.headline).fontWeight(.regular)
             Spacer()
             VStack {
