@@ -38,4 +38,9 @@ struct Utils {
             .joined()
     }
     
+    // Transform multi-word query parameter to a URL compliant format
+    static func transformQueryParam (query: String) -> String {
+        return query.replacing(" ", with: "%20")
+    }
+    
 }

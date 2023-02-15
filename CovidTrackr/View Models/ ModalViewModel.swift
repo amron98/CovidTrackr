@@ -21,7 +21,8 @@ class ModalViewModel: ObservableObject {
         isLoading = true
         
         // Build url for API request
-        let url = URL(string: "https://disease.sh/v3/covid-19/historical/\(country.name)?lastdays=all")!
+        let formattedName = Utils.transformQueryParam(query: self.country.name)
+        let url = URL(string: "https://disease.sh/v3/covid-19/historical/\(formattedName)?lastdays=all")!
         
         // Send request and wait for response
         APIService.fetchData(for: url) { (result: Result<CountryTimeline, Error>) in
