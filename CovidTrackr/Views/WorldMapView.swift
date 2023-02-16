@@ -12,9 +12,10 @@ import MapboxMaps
 
 struct WorldMapView: UIViewControllerRepresentable {
     @State var choice: String = "Cases"
+    @ObservedObject var viewModel: DashboardViewModel
     
     func makeUIViewController(context: Context) -> WorldMapViewController {
-        return WorldMapViewController()
+        return WorldMapViewController(viewModel: viewModel)
     }
     
     func updateUIViewController(_ uiViewController: WorldMapViewController, context: Context) {
@@ -24,7 +25,18 @@ struct WorldMapView: UIViewControllerRepresentable {
 
 class WorldMapViewController: UIViewController {
     internal var worldMapView: MapView!
+    private var viewModel: DashboardViewModel
 
+    
+    init(viewModel: DashboardViewModel){
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override public func viewDidLoad() {
         // Get access token from info.plist
         let accessToken = Bundle.main.object(forInfoDictionaryKey: "MBXAccessToken") as! String
