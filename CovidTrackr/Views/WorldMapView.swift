@@ -57,44 +57,20 @@ class WorldMapViewController: UIViewController {
         
         // Run the following when the base map loads
         worldMapView.mapboxMap.onNext(event: .mapLoaded) { _ in
-            self.addJSONDataLayer()
+            self.addTileDataLayer()
         }
     }
     
     
     // Create a data layer (Choropleth) using the Mapbox Countries tileset
-    func addJSONDataLayer() {
+    func addTileDataLayer() {
         // Sample Data
         struct Country {
             let code: String
             let cases: Int
             let deaths: Int
         }
-        let max_cases = 8000000
-        let countries = [
-            Country(code: "ROU", cases: 423523, deaths: 4235),
-            Country(code: "RUS", cases: 3253663, deaths: 32536),
-            Country(code: "SRB", cases: 2352356, deaths: 23523),
-            Country(code: "SVK", cases: 2155234, deaths: 21552),
-            Country(code: "SVN", cases: 235235, deaths: 2352),
-            Country(code: "ESP", cases: 757543, deaths: 7575),
-            Country(code: "SWE", cases: 75767, deaths: 757),
-            Country(code: "CHE", cases: 58799, deaths: 587),
-            Country(code: "HRV", cases: 12345, deaths: 123),
-            Country(code: "CZE", cases: 523647, deaths: 5236),
-            Country(code: "DNK", cases: 3247437, deaths: 32474),
-            Country(code: "EST", cases: 7435356, deaths: 74353),
-            Country(code: "FIN", cases: 398436, deaths: 3984),
-            Country(code: "FRA", cases: 346697, deaths: 3466),
-            Country(code: "DEU", cases: 7283589, deaths: 72835),
-            Country(code: "GRC", cases: 92853, deaths: 928),
-            Country(code: "ALB", cases: 903256, deaths: 9032),
-            Country(code: "AND", cases: 464373, deaths: 4739),
-            Country(code: "AUT", cases: 685757, deaths: 6735),
-            Country(code: "BLR", cases: 2935235, deaths: 23523),
-            Country(code: "BEL", cases: 93953, deaths: 1245),
-            Country(code: "BIH", cases: 7943654, deaths: 79436)
-        ]
+        let max_cases = 10000000 // Todo: Find max
 
         // Create the source for country polygons using the Mapbox Countries tileset
         // The polygons contain an ISO 3166 alpha-3 code which can be used to for joining the data
@@ -120,19 +96,26 @@ class WorldMapViewController: UIViewController {
             """
 
         // Calculate color values for each country based on 'cases' value
-        var red: Double
+        var colorValue: Double
         var expressionBody: String = ""
-        for country in countries {
+        
+        // Convert the range of data values (countries) to a suitable color
+        for country in viewModel.countries {
             // Calculate percentage of max cases
-            let ratio = Double(country.cases)/Double(max_cases) * 255 + 20
-            // Convert the range of data values to a suitable color
-            red = (ratio > 255) ? 255 : ratio
+            let ratio = Double(country.stats!.confirmed)/Double(max_cases) * 255 + 20
             
-            expressionBody += """
-            "\(country.code)",
-            "rgb(255, \(255 - red), \(255 - red))",
+            // Set color value based on the ratio of cases
+            colorValue = (ratio > 255) ? 255 : ratio // red
+            
+            // Extract iso3 of the country to build expression body
+            if let iso3 = country.info?.iso3 {
+                expressionBody += """
+                "\(iso3)",
+                "rgb(255, \(255 - colorValue), \(255 - colorValue))",
 
-            """
+                """
+            }
+
         }
 
         // Last value is the default, used where there is no data
@@ -154,9 +137,11 @@ class WorldMapViewController: UIViewController {
             try worldMapView.mapboxMap.style.addLayer(layer, layerPosition: .below("admin-1-boundary-bg"))
             if let expressionData = jsonExpression.data(using: .utf8) {
                 let expJSONObject = try JSONSerialization.jsonObject(with: expressionData, options: [])
-                try worldMapView.mapboxMap.style.setLayerProperty(for: "countries",
-                                                           property: "fill-color",
-                                                           value: expJSONObject)
+                try worldMapView.mapboxMap.style.setLayerProperty(
+                    for: "countries",
+                    property: "fill-color",
+                    value: expJSONObject
+                )
             }
         } catch {
             print("Failed to add the data layer. Error: \(error.localizedDescription)")
