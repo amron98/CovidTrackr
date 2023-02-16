@@ -11,11 +11,23 @@ public struct Worldometers: Decodable {
     public let country: String?
     public let countryInfo: CountryInfo?
     public let continent: String?
+    public let population: Int?
+    public let tests: Int?
+    public let updated: Int?
     
-    public init(country: String?, countryInfo: CountryInfo?, continent: String?){
+    public init(
+        country: String?,
+        countryInfo: CountryInfo?,
+        continent: String?,
+        population: Int?,
+        tests: Int?,
+        updated: Int?){
         self.country = country
         self.countryInfo = countryInfo
         self.continent = continent
+        self.population = population
+        self.tests = tests
+        self.updated = updated
     }
 
 }

@@ -45,6 +45,35 @@ struct ModalView: View {
                     .foregroundColor(.gray)
             }
             
+            Spacer()
+            Divider().padding(Edge.Set.horizontal, 20)
+            Spacer()
+            
+            // More Info
+            HStack {
+                VStack {
+                    Text("\(viewModel.country.population ?? 0)" )
+                        .font(.title3.bold())
+                        .foregroundStyle( Color.primary )
+                    Text("Population")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                }
+                Spacer()
+                VStack {
+                    Text("\(viewModel.country.tests ?? 0)" )
+                        .font(.title3.bold())
+                        .foregroundStyle( Color.accentColor )
+                    
+                    Text("Tests")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                }
+            }.padding(.horizontal, 45)
+            
+            Spacer()
+            Divider().padding(.horizontal, 20)
+            
             // Country Timeline
             VStack {
                 if viewModel.isLoading {
