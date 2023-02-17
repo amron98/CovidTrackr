@@ -105,7 +105,8 @@ class MapboxViewController: UIViewController {
         // Create world map with Mapbox API
         mapView = MapView(frame: view.bounds, mapInitOptions: mapInitOptions)
         mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        
+        mapView.layer.cornerRadius = 8
+        mapView.layer.masksToBounds = true
         // Pass map to WorldMapView
         self.view.addSubview(mapView)
         
