@@ -90,10 +90,17 @@ class MapboxViewController: UIViewController {
         
         // Setup map options
         let resourceOptions = ResourceOptions(accessToken: accessToken)
+        let cameraOptions = CameraOptions(
+            center: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0),
+            zoom: 0,
+            bearing: -7.6,
+            pitch: 0)
         let mapInitOptions = MapInitOptions(
             resourceOptions: resourceOptions,
+            cameraOptions: cameraOptions,
             styleURI: StyleURI(rawValue: "mapbox://styles/amroncodes/clchndkb5000515pofk3817vo")
         )
+        
    
         // Create world map with Mapbox API
         mapView = MapView(frame: view.bounds, mapInitOptions: mapInitOptions)
