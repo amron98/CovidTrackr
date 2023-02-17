@@ -143,9 +143,70 @@ class WorldMapViewController: UIViewController {
                     value: expJSONObject
                 )
             }
+            
+            // Set up the tap gesture
+            addTapGesture(to: worldMapView)
         } catch {
             print("Failed to add the data layer. Error: \(error.localizedDescription)")
         }
+    }
+    
+    // Add a tap gesture to the map view.
+    func addTapGesture(to mapView: MapView) {
+        // Create the tap gesture recognizer
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(findFeatures))
+        
+        // Add the gesture recognizer to the map view
+        mapView.addGestureRecognizer(tapGesture)
+    }
+        
+    /**
+     Use the tap point received from the gesture recognizer to query
+     the map for rendered features at the given point within the layer specified.
+     */
+    @objc public func findFeatures(_ sender: UITapGestureRecognizer) {
+        // Get geographic coordinates of the location (point) where the map is tapped
+        let tapPoint = sender.location(in: worldMapView)
+        
+        // Perform feature querying to extract country data from the tapPoint
+        worldMapView.mapboxMap.queryRenderedFeatures(
+            with: tapPoint,
+            options: RenderedQueryOptions(layerIds: ["countries"], filter: nil)) {[weak self] result in
+                switch result {
+                case.success(let features):
+                    // Extract the feature properties from the matching country
+                    if let firstFeature = features.first?.feature.properties,
+                       case let .string(iso3) = firstFeature["iso_3166_1_alpha_3"] {
+                        
+                        // Find matching country with iso3
+                        if let country = self?.getCountry(iso3: iso3) {
+                            // Wrap ModalView (a SwiftUI View) as HostingController for use in the context of UIKit
+                            let modalVC = UIHostingController(
+                                rootView: ModalView(
+                                    viewModel: ModalViewModel(country: country)
+                                )
+                            )
+                            // Set presentation style
+                            modalVC.modalPresentationStyle = .pageSheet
+        
+                            self?.present(
+                                modalVC,
+                                animated: true
+                            )
+                        }
+                    }
+                case .failure(let error):
+                    print("Could not present modal upon click")
+                    print(error.localizedDescription)
+                }
+            }
+    }
+    
+    // Returns a country containing the provided iso3
+    func getCountry(iso3: String) -> Country? {
+        return viewModel
+                .countries
+                    .first(where: {$0.info?.iso3 == iso3 })
     }
 }
 
