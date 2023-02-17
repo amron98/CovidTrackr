@@ -10,26 +10,73 @@
 import SwiftUI
 import MapboxMaps
 
-struct WorldMapView: UIViewControllerRepresentable {
-    @State var choice: String = "Cases"
+struct WorldMapView: View {
     @ObservedObject var viewModel: DashboardViewModel
+    @ObservedObject var modalTrackr = ModalTrackr() // tracks whether to show modal
+    @ObservedObject var selection = Selection()
     
-    func makeUIViewController(context: Context) -> WorldMapViewController {
-        return WorldMapViewController(viewModel: viewModel)
+    @Environment(\.colorScheme) var colorScheme
+    @State var showModal: Bool = false
+    
+    var body: some View {
+        NavigationView {
+            VStack(alignment: .center) {
+                MapboxView(viewModel: viewModel, modalTrackr: modalTrackr, selection: selection)
+                    .padding(2)
+                    .sheet(
+                        isPresented: $modalTrackr.showModal,
+                        content: {
+                            ModalView(viewModel: ModalViewModel(country: selection.selectedCountry!))
+                                .presentationDragIndicator(.visible)
+                                .presentationDetents([.height(500)])
+                        })
+            }
+            .padding()
+            .navigationTitle("World Map")
+            .background{
+                RoundedRectangle(cornerRadius: 10, style: .continuous )
+                    .fill(
+                        Color(UIColor.systemBackground)
+                            .shadow(
+                                .drop(
+                                    color: (colorScheme == .dark) ? Color.white : Color.secondary ,
+                                    radius: 2
+                                )
+                            )
+                    ).padding()
+            }
+        
+        }
+    }
+}
+struct MapboxView: UIViewControllerRepresentable {
+    @ObservedObject var viewModel: DashboardViewModel
+    @ObservedObject var modalTrackr: ModalTrackr
+    @ObservedObject var selection: Selection
+    
+    func makeUIViewController(context: Context) -> MapboxViewController {
+        return MapboxViewController(
+            viewModel: viewModel,
+            modalTrackr: modalTrackr,
+            selection: selection
+        )
     }
     
-    func updateUIViewController(_ uiViewController: WorldMapViewController, context: Context) {
+    func updateUIViewController(_ uiViewController: MapboxViewController, context: Context) {
         
     }
 }
 
-class WorldMapViewController: UIViewController {
-    internal var worldMapView: MapView!
+class MapboxViewController: UIViewController {
+    internal var mapView: MapView!
     private var viewModel: DashboardViewModel
-
+    private var selection: Selection
+    private var modalTrackr: ModalTrackr
     
-    init(viewModel: DashboardViewModel){
+    init(viewModel: DashboardViewModel, modalTrackr: ModalTrackr, selection: Selection){
         self.viewModel = viewModel
+        self.modalTrackr = modalTrackr
+        self.selection = selection
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -49,14 +96,14 @@ class WorldMapViewController: UIViewController {
         )
    
         // Create world map with Mapbox API
-        worldMapView = MapView(frame: view.bounds, mapInitOptions: mapInitOptions)
-        worldMapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        mapView = MapView(frame: view.bounds, mapInitOptions: mapInitOptions)
+        mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         // Pass map to WorldMapView
-        self.view.addSubview(worldMapView)
+        self.view.addSubview(mapView)
         
         // Run the following when the base map loads
-        worldMapView.mapboxMap.onNext(event: .mapLoaded) { _ in
+        mapView.mapboxMap.onNext(event: .mapLoaded) { _ in
             self.addTileDataLayer()
         }
     }
@@ -133,11 +180,11 @@ class WorldMapViewController: UIViewController {
         // Insert the vector layer below the 'admin-1-boundary-bg' layer in the style
         // Join data to the vector layer
         do {
-            try worldMapView.mapboxMap.style.addSource(source, id: sourceID)
-            try worldMapView.mapboxMap.style.addLayer(layer, layerPosition: .below("admin-1-boundary-bg"))
+            try mapView.mapboxMap.style.addSource(source, id: sourceID)
+            try mapView.mapboxMap.style.addLayer(layer, layerPosition: .below("admin-1-boundary-bg"))
             if let expressionData = jsonExpression.data(using: .utf8) {
                 let expJSONObject = try JSONSerialization.jsonObject(with: expressionData, options: [])
-                try worldMapView.mapboxMap.style.setLayerProperty(
+                try mapView.mapboxMap.style.setLayerProperty(
                     for: "countries",
                     property: "fill-color",
                     value: expJSONObject
@@ -145,7 +192,7 @@ class WorldMapViewController: UIViewController {
             }
             
             // Set up the tap gesture
-            addTapGesture(to: worldMapView)
+            addTapGesture(to: mapView)
         } catch {
             print("Failed to add the data layer. Error: \(error.localizedDescription)")
         }
@@ -166,10 +213,10 @@ class WorldMapViewController: UIViewController {
      */
     @objc public func findFeatures(_ sender: UITapGestureRecognizer) {
         // Get geographic coordinates of the location (point) where the map is tapped
-        let tapPoint = sender.location(in: worldMapView)
+        let tapPoint = sender.location(in: mapView)
         
         // Perform feature querying to extract country data from the tapPoint
-        worldMapView.mapboxMap.queryRenderedFeatures(
+        mapView.mapboxMap.queryRenderedFeatures(
             with: tapPoint,
             options: RenderedQueryOptions(layerIds: ["countries"], filter: nil)) {[weak self] result in
                 switch result {
@@ -180,19 +227,9 @@ class WorldMapViewController: UIViewController {
                         
                         // Find matching country with iso3
                         if let country = self?.getCountry(iso3: iso3) {
-                            // Wrap ModalView (a SwiftUI View) as HostingController for use in the context of UIKit
-                            let modalVC = UIHostingController(
-                                rootView: ModalView(
-                                    viewModel: ModalViewModel(country: country)
-                                )
-                            )
-                            // Set presentation style
-                            modalVC.modalPresentationStyle = .pageSheet
-        
-                            self?.present(
-                                modalVC,
-                                animated: true
-                            )
+                            // Update selection and trigger modal presentation
+                            self?.selection.selectedCountry = country
+                            self?.modalTrackr.showModal.toggle()
                         }
                     }
                 case .failure(let error):
@@ -210,3 +247,6 @@ class WorldMapViewController: UIViewController {
     }
 }
 
+class ModalTrackr: ObservableObject {
+    @Published var showModal: Bool = false
+}
