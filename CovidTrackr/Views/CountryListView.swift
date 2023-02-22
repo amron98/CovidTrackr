@@ -9,7 +9,7 @@ import SwiftUI
 
 // Note: This will eventually be part of the CountryListViewModel
 class Selection: ObservableObject {
-    @Published var selectedCountry: CountryData? = nil
+    @Published var selectedCountry: Country? = nil
 }
 
 struct CountryListView: View {
@@ -20,43 +20,59 @@ struct CountryListView: View {
     @State var searchVal: String = ""
     @State var showModal: Bool = false
 
-    // Used to store a filtered list of countries based on the searchVal
-    var searchResults: [CountryData] {
+    // Filters countries based on the searchVal
+    var searchResults: [Country] {
         if searchVal.isEmpty {
-            return viewModel.countryData
+            return viewModel.countries
         }
         else {
-            return viewModel.countryData.filter({ country in
-                country.country?.contains(searchVal) ?? false
+            return viewModel.countries.filter({ country in
+                country.name.contains(searchVal)
             })
         }
     }
-
+    
+    // Creates grouping of countries by first letter
+    var groupedCountries: [String: [Country]] {
+        Dictionary(grouping: searchResults, by: { String($0.name.first!) })
+    }
     
     var body: some View {
         NavigationView {
-            List(searchResults){ country in
-                let rowData = RowData(country: country.country ?? "", confirmed: country.stats?.confirmed ?? 0, deaths: country.stats?.deaths ?? 0, flag: Utils.getFlag(
-                        from: (viewModel
-                                .getWorldometersData(for: country.country!)?
-                                .countryInfo?
-                                .iso2) ?? "🏁"
-                ))
-                
-                
-                RowView(data: rowData)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        showModal.toggle()
-                        selection.selectedCountry = country
+            List {
+                ForEach(groupedCountries.keys.sorted(), id: \.self) { key in
+                    Section(header: Text(key)){
+                        ForEach(self.groupedCountries[key]!.sorted{ $0.name < $1.name }) { country in
+                            let rowData = RowData(
+                                country: country.name,
+                                confirmed: country.stats?.confirmed ?? 0,
+                                deaths: country.stats?.deaths ?? 0,
+                                flag: Utils.getFlag(from: (country.info?.iso2) ?? "🏁")
+                            )
+                            
+                            
+                            RowView(data: rowData)
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    showModal.toggle()
+                                    selection.selectedCountry = country
+                                }
+
+                        }
                     }
-                    .sheet(isPresented: $showModal, content: {
-                        ModalView(country: selection.selectedCountry ?? country, timeline: viewModel.globalTimeline)
-                            .presentationDragIndicator(.visible)
-                            .presentationDetents([.height(500)])
-                    })
+                }
             }
-            .listStyle(.plain)
+            .sheet(
+                isPresented: $showModal,
+                content: {
+                    ModalView(
+                        country: selection.selectedCountry!,
+                        timeline: viewModel.globalTimeline
+                    )
+                    .presentationDragIndicator(.visible)
+                    .presentationDetents([.height(500)])
+            })
+            .listStyle(.automatic)
             .navigationBarTitle("Countries")
         }
         .searchable(text: $searchVal, placement: .navigationBarDrawer(displayMode: .always))
@@ -68,7 +84,7 @@ struct RowView : View {
     
     var body: some View {
         HStack(alignment: .center) {
-            Text(data.flag).font(.custom("Hi", size: 24))
+            Text(data.flag).font(.custom("Arial", size: 24))
             Text(data.country).font(.headline).fontWeight(.regular)
             Spacer()
             VStack {
