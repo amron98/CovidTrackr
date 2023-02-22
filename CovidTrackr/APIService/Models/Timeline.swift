@@ -18,31 +18,40 @@ public struct Timeline : Decodable {
         self.deaths = deaths
     }
     
-    func getCasesFormatted () -> [(key: Date, value: Int)] {
-        var result = Array<(key: Date, value: Int)>()
+    func getCasesFormatted () -> [ChartData] {
+        var result = Array<ChartData>()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd/yy"
         
-        result = self.cases!.map() {
-            (dateFormatter.date(from: $0.key) ?? Date() ,$0.value )
-        }.sorted() {
-            $0.key > $1.key
-        }
+        // Transform data to the ChartData type
+        result = self.cases?.map({ item in
+            ChartData(date: dateFormatter.date(from: item.key)!, value: item.value)
+        }).sorted() {
+            $0.date > $1.date
+        } ?? result
+
         
         return result
     }
     
-    func getDeathsFormatted () -> [(key: Date, value: Int)] {
-        var result = Array<(key: Date, value: Int)>()
+    func getDeathsFormatted () -> [ChartData] {
+        var result = Array<ChartData>()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd/yy"
         
-        result = self.deaths!.map() {
-            (dateFormatter.date(from: $0.key) ?? Date() ,$0.value )
-        }.sorted() {
-            $0.key > $1.key
-        }
+        result = self.deaths?.map({ item in
+            ChartData(date: dateFormatter.date(from: item.key) ?? Date(), value: item.value)
+        }).sorted() {
+            $0.date > $1.date
+        } ?? result
         
         return result
     }
+}
+
+public struct ChartData: Identifiable {
+    public var date: Date
+    public var value: Int
+    
+    public var id: Date { date }
 }

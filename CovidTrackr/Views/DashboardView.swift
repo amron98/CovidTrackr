@@ -24,14 +24,12 @@ struct DashboardView: View {
     
     init(viewModel: DashboardViewModel) {
         self.viewModel = viewModel
-        self.viewModel.fetchGlobalTimeline()
-        self.viewModel.fetchCountryData()
     }
     
     var body: some View {
         NavigationStack {
             VStack {
-                LineChartView(title: "Global Totals", timeline: viewModel.globalTimeline)
+                LineChartView(title: "Global Totals", timeline: $viewModel.globalTimeline)
                 Spacer()
                 BarChartView(viewModel: viewModel)
             }
