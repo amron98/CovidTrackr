@@ -66,8 +66,7 @@ struct CountryListView: View {
                 isPresented: $showModal,
                 content: {
                     ModalView(
-                        country: selection.selectedCountry!,
-                        timeline: viewModel.globalTimeline
+                        viewModel: ModalViewModel(country: selection.selectedCountry!)
                     )
                     .presentationDragIndicator(.visible)
                     .presentationDetents([.height(500)])

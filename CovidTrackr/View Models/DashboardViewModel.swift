@@ -57,11 +57,15 @@ class DashboardViewModel: ObservableObject {
             
             let info = wmCountry.countryInfo!
             let continent = wmCountry.continent!
+            let population = wmCountry.population!
+            let tests = wmCountry.tests!
             
             // Proceed only if there is corresponding JHUCountry data in the dictionary
             if var country = countryDict[name] {
                 country.info = info
                 country.continent = continent
+                country.population = population
+                country.tests = tests
                 
                 // Update dictionary
                 countryDict[name] = country
