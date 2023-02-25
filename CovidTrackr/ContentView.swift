@@ -28,7 +28,7 @@ struct ContentView: View {
                     Text("Countries")
                 }
             
-            WorldMapView()
+            WorldMapView(viewModel: dashboardViewModel)
                 .tabItem{
                     Image(systemName: "globe")
                     Text("World Map")
