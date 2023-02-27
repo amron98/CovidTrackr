@@ -17,10 +17,11 @@ struct WorldMapView: View {
     
     @Environment(\.colorScheme) var colorScheme
     @State var showModal: Bool = false
+    @State var currentTab: String = "Cases"
     
     var body: some View {
         NavigationView {
-            VStack(alignment: .center) {
+            ZStack(alignment: .center) {
                 MapboxView(viewModel: viewModel, modalTrackr: modalTrackr, selection: selection)
                     .padding(2)
                     .sheet(
@@ -30,6 +31,32 @@ struct WorldMapView: View {
                                 .presentationDragIndicator(.visible)
                                 .presentationDetents([.height(500)])
                         })
+                VStack() {
+                    Spacer()
+                    Picker("", selection: $currentTab) {
+                        Text("Cases")
+                            .tag("Cases")
+                        Text("Deaths")
+                            .tag("Deaths")
+                    }
+                    .pickerStyle(.segmented)
+                    .padding()
+                    .background{
+                        RoundedRectangle(cornerRadius: 8, style: .continuous )
+                            .fill(
+                                Color(UIColor.systemBackground)
+                                    .shadow(
+                                        .drop(
+                                            color: (colorScheme == .dark) ? Color.white : Color.secondary ,
+                                            radius: 2
+                                        )
+                                    )
+                            ).padding()
+                    }
+                }
+                .frame(minWidth: 0, maxWidth:  200, minHeight: 0, maxHeight: .infinity, alignment: .center)
+                .padding(.bottom,30)
+
             }
             .padding()
             .navigationTitle("World Map")
@@ -44,7 +71,7 @@ struct WorldMapView: View {
                                 )
                             )
                     ).padding()
-            }
+            }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
         
         }
     }
