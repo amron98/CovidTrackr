@@ -35,13 +35,16 @@ struct BarChartView: View {
                     .font(.headline.bold())
                 
                 Picker("", selection: $currentTab) {
-                    Text("Cases").tag("Cases")
-                    Text("Deaths").tag("Deaths")
-                    
+                    Text("Cases")
+                        .tag("Cases")
+                    Text("Deaths")
+                        .tag("Deaths")
                 }
                 .pickerStyle(.segmented)
-                .padding(.leading,80)
-                .foregroundColor((currentTab == "Cases") ? Color.blue : Color.red)
+                .padding(.leading)
+                .frame(width: 150)
+                .colorMultiply((currentTab == "Cases") ? Color.blue : Color.red)
+
             }
             
             

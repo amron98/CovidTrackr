@@ -38,7 +38,6 @@ struct LineChartView: View {
         }
     }
     
-    
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack{
@@ -54,9 +53,11 @@ struct LineChartView: View {
                     
                 }
                 .pickerStyle(.segmented)
-                .padding(.leading,80)
+                .padding(.leading)
+                .frame(width: 150)
+                .colorMultiply((currentTab == "Cases") ? Color.blue : Color.red)
+
             }
-            
             
             Text("\(currentTotal)")
                 .font(.title.bold())

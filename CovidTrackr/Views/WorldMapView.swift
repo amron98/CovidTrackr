@@ -44,6 +44,7 @@ struct WorldMapView: View {
                     }
                     .pickerStyle(.segmented)
                     .padding()
+                    .colorMultiply((tabTrackr.currentTab == "Cases") ? Color.blue : Color.red)
                     .background{
                         RoundedRectangle(cornerRadius: 8, style: .continuous )
                             .fill(
@@ -179,6 +180,7 @@ class MapboxViewController: UIViewController {
             print("Failed to add source. \nError: \(error.localizedDescription)")
         }
     }
+    
     // Create a data layer (Choropleth) of confirmed COVID-19 cases using the Mapbox Countries tileset
     func addDeathsData() {
 
