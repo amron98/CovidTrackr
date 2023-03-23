@@ -204,9 +204,9 @@ class MapboxViewController: UIViewController {
         var expressionBody: String = ""
         var colorRGB: String = ""
         let max_deaths = 1000000
-        let startColor: Color = Color(red: 1, green: 1, blue: 1)
+        let startColor: Color = Color(red: 1, green: 0.8745, blue: 0.9019)
         var curColor: Color
-        let endColor: Color = Color(red: 0.03922, green: 0.1176, blue: 0.8627)
+        let endColor: Color = Color(red: 0.53, green: 0, blue: 0)
         // Convert the range of data values (countries) to a suitable color
         for country in viewModel.countries {
             // Calculate percentage of max deaths
@@ -220,7 +220,7 @@ class MapboxViewController: UIViewController {
             // Interpolate color value based on the ratio of deaths
             curColor = startColor.interpolateRGB(endColor, fraction: ratio)!
             
-            // Generate string version of the rgb color value for use in the 
+            // Generate string version of the rgb color value for use in the
             colorRGB = "rgba(\((curColor.cgColor?.components![0])! * 255),\( (curColor.cgColor?.components![1])! * 255),\((curColor.cgColor?.components![2])! * 255), 1)"
             
             // Extract iso3 of the country to build expression body
@@ -312,10 +312,7 @@ class MapboxViewController: UIViewController {
             if ratio > 1 {
                 ratio = 1
             }
-            // Interpolate color value based on the ratio of deaths
             curColor = startColor.interpolateRGB(endColor, fraction: ratio)!
-            
-            // Generate string version of the rgb color value for use in the 
             colorRGB = "rgba(\((curColor.cgColor?.components![0])! * 255),\( (curColor.cgColor?.components![1])! * 255),\((curColor.cgColor?.components![2])! * 255), 1)"
             
             // Extract iso3 of the country to build expression body
