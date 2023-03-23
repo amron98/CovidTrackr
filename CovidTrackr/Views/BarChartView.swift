@@ -34,6 +34,8 @@ struct BarChartView: View {
                 Text("Top 5 Countries")
                     .font(.headline.bold())
                 
+                Spacer()
+                
                 Picker("", selection: $currentTab) {
                     Text("Cases")
                         .tag("Cases")
@@ -72,7 +74,7 @@ struct BarChartView: View {
             
 
             // Re-Animating View
-            animateGraph(fromChange: true)
+//            animateGraph(fromChange: true)
         }
         .onAppear {
             topFive = (currentTab == "Cases") ?
@@ -134,9 +136,8 @@ struct BarChartView: View {
             }
         }
         .frame(maxHeight: 200)
-        .onAppear{
-            animateGraph()
-        }
+        .animation(.easeInOut)
+
     }
     
     func animateGraph(fromChange: Bool = false){

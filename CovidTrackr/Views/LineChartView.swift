@@ -128,9 +128,7 @@ struct LineChartView: View {
             
         }
         .frame(maxHeight: 200)
-//        .onAppear{
-//            animateGraph()
-//        }
+        .animation(.easeInOut)
     }
     
     func animateGraph(fromChange: Bool = false){
