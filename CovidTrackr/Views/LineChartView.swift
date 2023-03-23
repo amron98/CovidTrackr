@@ -41,9 +41,13 @@ struct LineChartView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack{
-                Text("\(title)")
-                    .font(.headline.bold())
- 
+
+                ScrollView(.horizontal){
+                    Text("\(title)")
+                        .font(.headline.bold())
+                }
+
+                Spacer()
                 
                 Picker("", selection: $currentTab) {
                     Text("Cases")
