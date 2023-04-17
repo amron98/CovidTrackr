@@ -38,13 +38,16 @@ struct LineChartView: View {
         }
     }
     
-    
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack{
-                Text("\(title)")
-                    .font(.headline.bold())
- 
+
+                ScrollView(.horizontal){
+                    Text("\(title)")
+                        .font(.headline.bold())
+                }
+
+                Spacer()
                 
                 Picker("", selection: $currentTab) {
                     Text("Cases")
@@ -54,9 +57,11 @@ struct LineChartView: View {
                     
                 }
                 .pickerStyle(.segmented)
-                .padding(.leading,80)
+                .padding(.leading)
+                .frame(width: 150)
+                .colorMultiply((currentTab == "Cases") ? Color.blue : Color.red)
+
             }
-            
             
             Text("\(currentTotal)")
                 .font(.title.bold())
@@ -127,9 +132,7 @@ struct LineChartView: View {
             
         }
         .frame(maxHeight: 200)
-//        .onAppear{
-//            animateGraph()
-//        }
+        .animation(.easeInOut)
     }
     
     func animateGraph(fromChange: Bool = false){

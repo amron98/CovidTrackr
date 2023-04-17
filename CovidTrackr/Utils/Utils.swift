@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct Utils {
     // Round up to x significant digits
@@ -44,3 +45,20 @@ struct Utils {
     }
     
 }
+
+extension Color {
+    // Interpolate rgb values of the current color to a given 'end' color as per the provided fraction
+    func interpolateRGB(_ end: Color, fraction: CGFloat) -> Color? {
+        let f = min(max(0, fraction), 1)
+        
+        guard let c1 = self.cgColor?.components, let c2 = end.cgColor?.components else { return nil }
+        
+        let r: CGFloat = CGFloat(c1[0] + (c2[0] - c1[0]) * f)
+        let g: CGFloat = CGFloat(c1[1] + (c2[1] - c1[1]) * f)
+        let b: CGFloat = CGFloat(c1[2] + (c2[2] - c1[2]) * f)
+//        let a: CGFloat = CGFloat(c1[3] + (c2[3] - c1[3]) * f)
+        
+        return Color(red: r, green: g, blue: b)
+    }
+}
+
