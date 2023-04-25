@@ -296,10 +296,10 @@ class MapboxViewController: UIViewController {
         var colorValue: Double = 0.0
         var expressionBody: String = ""
         var colorRGB: String = ""
-        let max_cases = 10500000
-        let startColor: Color = Color(red: 1, green: 1, blue: 1)
+        let max_cases = 60000000
+        let startColor: Color = Color(red: 0.857, green: 0.9176, blue: 0.937)
         var curColor: Color
-        let endColor: Color = Color(red: 0.03922, green: 0.1176, blue: 0.8627)
+        let endColor: Color = Color(red: 0.035, green: 0.2627, blue: 0.6509)
         // Convert the range of data values (countries) to a suitable color
         for country in viewModel.countries {
             // Calculate percentage of max cases
