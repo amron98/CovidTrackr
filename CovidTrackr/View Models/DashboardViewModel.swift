@@ -21,7 +21,6 @@ class DashboardViewModel: ObservableObject {
     }
     
     init(){
-        self.fetchCountryData()
         self.fetchGlobalTimeline()
         self.fetchWorldometers()
         self.normalizeData()
@@ -180,19 +179,7 @@ class DashboardViewModel: ObservableObject {
         }
     }
     
-    // Makes an API fetch to update countryData data
-    func fetchCountryData() {
-        let response = APIService.fetchDataSync(for: URL(string: "https://disease.sh/v3/covid-19/jhucsse")!) as Result<[CountryData], Error>
-        
-        switch response {
-        case .success(let data):
-            self.countryData = self.filterMultipleProvinces(data: data)
-        case .failure(let error):
-            print("Error loading JHUCSSE country (all) data")
-            print(error)
-            
-        }
-    }
+
     
     // Returns the top five countries sorted by cases or deaths
     func getTopFiveCountries(sortBy: SortBy) -> [CountryData]?{
