@@ -31,45 +31,29 @@ class DashboardViewModel: ObservableObject {
     func normalizeData(){
         var countryDict = [String:Country]()
         
-        // Merge JHUCSSE data
-        for jhuCountry in countryData {
-            let name = jhuCountry.country!
-            let stats = jhuCountry.stats!
-            
-            // Check if country is in dictionary, or create new
-            let country = countryDict[name] ?? Country(
-                name: name,
-                stats: stats
-            )
-            
-            countryDict[name] = country
-        }
-        
         // Merge WM data
         for wmCountry in worldometers {
             
-            var name = ""
-            if let jhuName = wmNamesMap[wmCountry.country!] {
-                name = jhuName
-            }else{
-                name = wmCountry.country!
-            }
-            
+            let name = wmCountry.country!
+            let cases = wmCountry.cases!
+            let deaths = wmCountry.deaths!
             let info = wmCountry.countryInfo!
             let continent = wmCountry.continent!
             let population = wmCountry.population!
             let tests = wmCountry.tests!
             
-            // Proceed only if there is corresponding JHUCountry data in the dictionary
-            if var country = countryDict[name] {
-                country.info = info
-                country.continent = continent
-                country.population = population
-                country.tests = tests
-                
-                // Update dictionary
-                countryDict[name] = country
-            }
+            // Check if country is in dictionary, or create new
+            let country = Country(
+                name: name,
+                continent: continent,
+                population: population,
+                tests: tests,
+                info: info,
+                stats: CovidStats(confirmed: cases, deaths: deaths)
+            )
+            
+            countryDict[name] = country
+
         }
         
         // Update countries as normalized data
