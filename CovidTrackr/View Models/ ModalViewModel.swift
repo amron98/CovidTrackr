@@ -21,7 +21,7 @@ class ModalViewModel: ObservableObject {
         isLoading = true
         
         // Build url for API request
-        let formattedName = Utils.transformQueryParam(query: self.country.name)
+        let formattedName = Utils.transformQueryParam(query: self.country.info!.iso3!)
         let url = URL(string: "https://disease.sh/v3/covid-19/historical/\(formattedName)?lastdays=all")!
         
         // Send request and wait for response
@@ -34,7 +34,7 @@ class ModalViewModel: ObservableObject {
                     self.isLoading = false
                 }
             case .failure(let error):
-                print("Error loading JHUCSSE timeline for \(self.country)")
+                print("Error loading JHUCSSE timeline for \(self.country.name)")
                 print(error.localizedDescription)
             }
         }
