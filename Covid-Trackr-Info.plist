@@ -6,10 +6,13 @@
 	<string>pk.eyJ1IjoiYW1yb25jb2RlcyIsImEiOiJjbGNobjU3aHEwamU4M3ZzNmdjaDBmZDA4In0.THJt5R1Id6LqBgSDKctXoA</string>
 	<key>UILaunchScreen</key>
 	<dict>
-		<key>UIImageName</key>
-		<string>CovidTrackrBannerLite</string>
-		<key>UIImageRespectsSafeAreaInsets</key>
-		<true/>
+		<key>UILaunchScreen</key>
+		<dict>
+			<key>Background color</key>
+			<string>LaunchScreenColor</string>
+			<key>Image Name</key>
+			<string>CovidTrackrBanner</string>
+		</dict>
 	</dict>
 </dict>
 </plist>
