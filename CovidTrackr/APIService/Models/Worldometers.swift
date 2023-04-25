@@ -9,6 +9,8 @@ import Foundation
 
 public struct Worldometers: Decodable {
     public let country: String?
+    public let cases: Int?
+    public let deaths: Int?
     public let countryInfo: CountryInfo?
     public let continent: String?
     public let population: Int?
@@ -17,12 +19,16 @@ public struct Worldometers: Decodable {
     
     public init(
         country: String?,
+        cases: Int?,
+        deaths: Int?,
         countryInfo: CountryInfo?,
         continent: String?,
         population: Int?,
         tests: Int?,
         updated: Int?){
         self.country = country
+        self.cases = cases
+        self.deaths = deaths
         self.countryInfo = countryInfo
         self.continent = continent
         self.population = population
