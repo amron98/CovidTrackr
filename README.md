@@ -1,6 +1,6 @@
 # CovidTrackr
 
-CovidTrackr is an iOS app for visualizing global COVID-19 data from the [disease.sh](https://disease.sh) API. While this app is currently under development, it is designed to feature animated line and bar charts, as well as a [Choropleth map](https://datavizcatalogue.com/methods/choropleth.html).
+CovidTrackr is an iOS app for visualizing global COVID-19 data from the [disease.sh](https://disease.sh) API and features animated line and bar charts, as well as a [Choropleth map](https://datavizcatalogue.com/methods/choropleth.html).
 
 ![previewed](https://user-images.githubusercontent.com/54814481/234190409-6734e9de-ee70-4baf-bfe6-cc56ad5dc2e4.png)
 
